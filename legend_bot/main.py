@@ -1,12 +1,18 @@
 from control import init_control, wait_if_paused
 import time
-
+from utils.screenVision import find, exists
+from utils.actions import click, hover, scroll
 init_control()
 
 try:
-    for i in range(100):
-        wait_if_paused()
-        print(f"Executando passo {i}")
-        time.sleep(1)
+    if exists("legend_bot/images/imagemTesteWait1.png"):
+        print(">> A imagem da loja está visível!")
+        click("legend_bot/images/imagemTesteWait1.png")
+
+    pos = find("legend_bot/images/imagemTesteWait1.png")
+    if pos:
+        print(f">> Imagem da torre detectada em {pos}")
+
+
 except KeyboardInterrupt:
     print("Bot finalizado com segurança.")
