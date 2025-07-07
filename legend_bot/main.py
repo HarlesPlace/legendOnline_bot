@@ -1,18 +1,17 @@
-from control import init_control, wait_if_paused
-import time
-from utils.screenVision import find, exists
-from utils.actions import click, hover, scroll
+from core.control import init_control
+from core.task_manager import TaskManager
+
 init_control()
 
-try:
-    if exists("legend_bot/images/imagemTesteWait1.png"):
-        print(">> A imagem da loja está visível!")
-        click("legend_bot/images/imagemTesteWait1.png")
+def main():
+    try:
+        print("[BOT] Iniciando execução...")
+        tarefas = []
+        manager = TaskManager(tarefas)
+        manager.run_all()
+        print("[BOT] Execução finalizada.")
+    except KeyboardInterrupt:
+        print("Bot finalizado com segurança.")
 
-    pos = find("legend_bot/images/imagemTesteWait1.png")
-    if pos:
-        print(f">> Imagem da torre detectada em {pos}")
-
-
-except KeyboardInterrupt:
-    print("Bot finalizado com segurança.")
+if __name__ == "__main__":
+    main()
