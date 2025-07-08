@@ -1,5 +1,5 @@
 from datetime import datetime
-from legend_bot.core.base_task import BaseTask
+from core.base_task import BaseTask
 
 class FixedTimeTask(BaseTask):
     def __init__(self, start_hour: int, end_hour: int):

@@ -1,8 +1,8 @@
 import time, threading
-from legend_bot.utils.screenVision import exists
-from legend_bot.utils.actions import click
-from legend_bot.core.control import happend_error, error_solved
-from legend_bot.utils.window import active_game, open_game
+from utils.screenVision import exists
+from utils.actions import click
+from core.control import happend_error, error_solved
+from utils.window import active_game, open_game
 
 # Número máximo de tentativas para recuperar
 MAX_TENTATIVAS = 3
@@ -49,7 +49,7 @@ def monitor_errors():
         # 5. Falha definitiva
         if tentativas >= MAX_TENTATIVAS:
             print("[RECOVERY] Falha crítica. Não foi possível recuperar o jogo.")
-            registrar_erro()
+            #registrar_erro()
             break
 
 def init_errorMonitor():

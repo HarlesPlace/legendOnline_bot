@@ -20,13 +20,6 @@ def wait(image_path, timeout=10, confidence=0.8, debug=True):
         total_pause_time += pause_end - pause_start
 
         elapsed = time.time() - start_time - total_pause_time
-
-        if debug:
-            print(f"[DEBUG] Tempo de espera: {elapsed:.2f}s / Tempo limite: {timeout}s")
-
-        if elapsed > timeout:
-            print("[AVISO] Imagem não encontrada no tempo limite.")
-            return None
         
         screenshot = pyautogui.screenshot()
         screenshot = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
@@ -52,6 +45,13 @@ def wait(image_path, timeout=10, confidence=0.8, debug=True):
 
             print(f"[INFO] Imagem encontrada em ({center_x}, {center_y})")
             return (center_x, center_y)
+        
+        if debug:
+            print(f"[DEBUG] Tempo de espera: {elapsed:.2f}s / Tempo limite: {timeout}s")
+
+        if elapsed > timeout:
+            print("[AVISO] Imagem não encontrada no tempo limite.")
+            return None
 
         time.sleep(1)
 
@@ -130,3 +130,36 @@ def list_all(image_path, confidence=0.8, debug=True, min_distance=10):
         print(f"[INFO] {len(positions)} ocorrência(s) encontradas.")
 
     return positions
+
+def wait_until_disappear(image_path, timeout=15, confidence=0.9):
+    """
+    Espera até uma imagem desaparecer da tela.
+
+    - image_path: caminho da imagem
+    - timeout: tempo máximo em segundos
+    - confidence: precisão do match (0 a 1)
+
+    Retorna True se desapareceu, False se ainda estava na tela após o timeout.
+    """
+    from core.control import wait_if_paused_or_error
+
+    start_time = time.time()
+    total_pause_time = 0
+
+    while True:
+        pause_start = time.time()
+        wait_if_paused_or_error()
+        pause_end = time.time()
+        total_pause_time += pause_end - pause_start
+
+        elapsed = time.time() - start_time - total_pause_time
+
+        if not exists(image_path, confidence=confidence):
+            print(f"[VISÃO] Imagem '{image_path}' desapareceu.")
+            return True
+
+        if elapsed> timeout:
+            print(f"[VISÃO] Timeout. Imagem '{image_path}' ainda está visível.")
+            return False
+
+        time.sleep(1)
