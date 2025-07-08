@@ -4,6 +4,7 @@ import time
 
 PAUSED = False
 STOP = False
+ERROR = False
 
 def pause_or_continue():
     global PAUSED
@@ -25,9 +26,26 @@ def init_control():
     listener = threading.Thread(target = listen_keyboard, daemon = True)
     listener.start()
 
-def wait_if_paused():
-    while (PAUSED and not STOP):
+def wait_if_paused_or_error():
+    while (PAUSED and not STOP and not ERROR):
         print("[BOT PAUSADO]")
         time.sleep(0.5)
     if STOP:
         raise KeyboardInterrupt("Execução encerrada.")
+    
+def happend_error():
+    global ERROR
+    ERROR = True
+    print(">> [ERRO] Ocorreu um erro. Pressione Ctrl+Alt+S para encerrar o bot.")
+    while not STOP:
+        time.sleep(1)
+    print(">> [ENCERRANDO BOT APÓS ERRO...]")
+
+def error_solved():
+    global ERROR
+    ERROR = False
+    print(">> [ERRO RESOLVIDO] O bot pode continuar a execução.")
+    if not PAUSED:
+        print(">> [RETOMANDO EXECUÇÃO]")
+    else:
+        print(">> [BOT PAUSADO] Pressione Ctrl+Alt+P para retomar.")

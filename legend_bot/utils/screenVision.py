@@ -9,13 +9,13 @@ def wait(image_path, timeout=10, confidence=0.8, debug=True):
     Espera até que uma imagem apareça na tela ou o tempo esgote.
     Retorna o centro (x, y) da imagem encontrada ou None.
     """
-    from core.control import wait_if_paused
+    from core.control import wait_if_paused_or_error
 
     start_time = time.time()
     total_pause_time = 0
     while True:
         pause_start = time.time()
-        wait_if_paused()
+        wait_if_paused_or_error()
         pause_end = time.time()
         total_pause_time += pause_end - pause_start
 

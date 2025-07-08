@@ -1,9 +1,10 @@
 from core.control import init_control
 from core.task_manager import TaskManager
-
-init_control()
+from core.recovery import init_errorMonitor
 
 def main():
+    init_control()
+    #init_errorMonitor()
     try:
         print("[BOT] Iniciando execução...")
         tarefas = []
