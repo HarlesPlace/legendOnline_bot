@@ -1,24 +1,24 @@
 import pyautogui
 import time
-from utils.screenVision import wait
+from utils.screenVision import wait, find
 
-def hover(image_path, timeout=10, confidence=0.8):
+def hover(image_path, confidence=0.8, region=None):
     """
     Move o mouse até o centro da imagem detectada na tela.
     """
-    position = wait(image_path, timeout=timeout, confidence=confidence,debug=False)
+    position = find(image_path, confidence=confidence, debug=False, region=region)
     if position:
-        pyautogui.moveTo(position[0], position[1], duration=0.3)
+        pyautogui.moveTo(position[0]+position[2]/2, position[1]+position[3]/2, duration=0.3)
         print(f"[INFO] Mouse movido até {position}")
         return True
     print("[ERRO] Imagem não encontrada para hover.")
     return False
 
-def click(image_path, timeout=10, confidence=0.8):
+def click(image_path, confidence=0.8, region=None):
     """
     Clica no centro da imagem detectada na tela.
     """
-    if hover(image_path, timeout=timeout, confidence=confidence):
+    if hover(image_path, confidence=confidence, region=region):
         pyautogui.click()
         print("[INFO] Clique executado.")
         return True
@@ -120,3 +120,27 @@ def drag(from_image, to_image, timeout=10, confidence=0.8):
 
     print(f"[INFO] Arrasto realizado de {start_pos} até {end_pos}")
     return True
+
+def wait_time(seconds):
+    """
+    Espera um número específico de segundos.
+    
+    - seconds: tempo em segundos para esperar
+    """
+    from core.control import wait_if_paused_or_error
+
+    start_time = time.time()
+    total_pause_time = 0
+    while True:
+        pause_start = time.time()
+        wait_if_paused_or_error()
+        pause_end = time.time()
+        total_pause_time += pause_end - pause_start
+
+        elapsed = time.time() - start_time - total_pause_time
+
+        if elapsed > seconds:
+            print("[AVISO] Tempo de espera cumprido.")
+            return None
+        
+        time.sleep(seconds)
