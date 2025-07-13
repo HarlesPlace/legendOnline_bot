@@ -3,6 +3,7 @@ from core.base_task import BaseTask
 
 class DailyTask(BaseTask):
     def __init__(self):
+        self.running = True
         self.last_run_date = None
 
     def should_run(self) -> bool:

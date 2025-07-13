@@ -14,7 +14,7 @@ def main():
         #manager.run_all()
         print("[BOT] Execução finalizada.")
         #wait_for_text("Comunicado", invert=True, timeout=60, region=BOTTOM_RIGHT)
-        #find_text("COMUNICADO", region=BOTTOM_RIGHT, invert=True, debug=True)
+        #find_text("Equipamentos", invert=True, debug=True)
         prepare_window()
     except KeyboardInterrupt:
         print("Bot finalizado com segurança.")

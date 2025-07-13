@@ -57,10 +57,14 @@ def prepare_window():
     Prepara a janela do jogo para o bot
     """
     maximizeGameWindow()
+    closeMissionBar()
     close_comunicates()
     if exists("legend_bot/images/prepare_window/eventsColapserButton.png", confidence=0.95, debug=False, region=TOP_RIGHT):
         click("legend_bot/images/prepare_window/eventsColapserButton.png", confidence=0.95, region=TOP_RIGHT)
         wait("legend_bot/images/prepare_window/eventsUncolapserButton.png", timeout=15, confidence=0.95, debug=False, region=TOP_RIGHT)
+    if exists("legend_bot/images/prepare_window/hidePlayersButton.png", confidence=0.95, debug=False, region=TOP_RIGHT):
+        click("legend_bot/images/prepare_window/hidePlayersButton.png", confidence=0.95, region=TOP_RIGHT)
+        wait_time(3)
     if exists("legend_bot/images/prepare_window/chatColapseControl.png", confidence=0.95, debug=False, region=BOTTOM_LEFT):
         especificPlace=find("legend_bot/images/prepare_window/chatColapseControl.png", confidence=0.8, region=BOTTOM_LEFT, debug=False)
         print(f"[INFO] Especific place found: {especificPlace}")
@@ -68,6 +72,32 @@ def prepare_window():
         wait_time(3)
         click("legend_bot/images/prepare_window/chatColapserButton.png", confidence=0.8, region=especificPlace)
         wait_time(3)
-    if exists("legend_bot/images/prepare_window/missionsColapserButton.png", confidence=0.95, debug=False, region=TOP_RIGHT):
-        click("legend_bot/images/prepare_window/missionsColapserButton.png", confidence=0.95, region=TOP_RIGHT)
+
+def closeMissionBar():
+    if exists("legend_bot/images/prepare_window/missionsColapserButton.png", confidence=0.9, debug=False, region=TOP_RIGHT):
+        click("legend_bot/images/prepare_window/missionsColapserButton.png", confidence=0.9, region=TOP_RIGHT)
         wait_time(3)
+
+def move_mouse_outside_screen():
+    """
+    Move o cursor para fora da tela visível, evitando tooltips e interferência em OCR/imagem.
+    """
+    pyautogui.moveTo(SCREEN_WIDTH + 100, SCREEN_HEIGHT + 100)
+
+def find_in_eventBar(image_path):
+    """
+    Encontra um elemento na barra de eventos.
+    """
+    if exists("legend_bot\images\colect_Summer\eventsUncolapserButton.png",confidence=0.9, debug=False, region=TOP_BAR) and self.running:
+        click("legend_bot\images\colect_Summer\eventsUncolapserButton.png",confidence=0.9, region=TOP_BAR)
+        wait_time(5)
+    move_mouse_outside_screen()
+    if (not exists(image_path, confidence=0.9, debug=False, region=TOP_BAR)) and exists("legend_bot\images\find_in_eventBar\nextButton.png", confidence=0.9, debug=False, region=TOP_BAR):
+        click("legend_bot\images\find_in_eventBar\nextButton.png", confidence=0.9, region=TOP_BAR, debug=False)
+    elif ((not exists(image_path, confidence=0.9, debug=False, region=TOP_BAR)) and exists("legend_bot\images\find_in_eventBar\previewButton.png", confidence=0.9, debug=False, region=TOP_BAR)):
+        click("legend_bot\images\find_in_eventBar\previewButton.png", confidence=0.9, region=TOP_BAR, debug=False)
+    move_mouse_outside_screen()
+    if exists(image_path, confidence=0.9, debug=False, region=TOP_BAR):
+        return True
+    else:
+        return False
