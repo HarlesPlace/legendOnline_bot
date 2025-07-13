@@ -1,6 +1,7 @@
 from utils.screenVision import exists, wait, find
-from utils.actions import click, wait_time
+from utils.actions import click, wait_time, click_position
 from utils.regions import *
+from utils.mapsCoords import MAP_LOCATIONS
 
 def close_comunicates():
     """
@@ -88,16 +89,52 @@ def find_in_eventBar(image_path):
     """
     Encontra um elemento na barra de eventos.
     """
-    if exists("legend_bot\images\colect_Summer\eventsUncolapserButton.png",confidence=0.9, debug=False, region=TOP_BAR) and self.running:
-        click("legend_bot\images\colect_Summer\eventsUncolapserButton.png",confidence=0.9, region=TOP_BAR)
+    if exists(r"legend_bot\images\colect_Summer\eventsUncolapserButton.png",confidence=0.9, debug=False, region=TOP_BAR):
+        click(r"legend_bot\images\colect_Summer\eventsUncolapserButton.png",confidence=0.9, region=TOP_BAR)
         wait_time(5)
     move_mouse_outside_screen()
-    if (not exists(image_path, confidence=0.9, debug=False, region=TOP_BAR)) and exists("legend_bot\images\find_in_eventBar\nextButton.png", confidence=0.9, debug=False, region=TOP_BAR):
-        click("legend_bot\images\find_in_eventBar\nextButton.png", confidence=0.9, region=TOP_BAR, debug=False)
-    elif ((not exists(image_path, confidence=0.9, debug=False, region=TOP_BAR)) and exists("legend_bot\images\find_in_eventBar\previewButton.png", confidence=0.9, debug=False, region=TOP_BAR)):
-        click("legend_bot\images\find_in_eventBar\previewButton.png", confidence=0.9, region=TOP_BAR, debug=False)
+    if (not exists(image_path, confidence=0.9, debug=False, region=TOP_BAR)) and exists(r"legend_bot\images\find_in_eventBar\nextButton.png", confidence=0.9, debug=False, region=TOP_BAR):
+        click(r"legend_bot\images\find_in_eventBar\nextButton.png", confidence=0.9, region=TOP_BAR, debug=False)
+    elif ((not exists(image_path, confidence=0.9, debug=False, region=TOP_BAR)) and exists(r"legend_bot\images\find_in_eventBar\previewButton.png", confidence=0.9, debug=False, region=TOP_BAR)):
+        click(r"legend_bot\images\find_in_eventBar\previewButton.png", confidence=0.9, region=TOP_BAR, debug=False)
     move_mouse_outside_screen()
     if exists(image_path, confidence=0.9, debug=False, region=TOP_BAR):
         return True
     else:
         return False
+
+def open_map():
+    """
+    Abre o mapa do jogo.
+    """
+    go_to_Interface("sky")
+    mapbutton = find(r"legend_bot\images\by_map_go_to\mapButton.png", confidence=0.8, debug=False, region=BOTTOM_RIGHT)
+    if not mapbutton:
+        print("[ERRO] Botão do mapa não encontrado.")
+        return False
+    else:
+        click_position(mapbutton)
+        wait(r"legend_bot\images\by_map_go_to\map.png", timeout=20, confidence=0.8, debug=False, region=FULL_SCREEN)
+        return True
+    
+def by_map_go_to(place_name):
+    if place_name not in MAP_LOCATIONS:
+        print(f"[ERRO] Local '{place_name}' não cadastrado no mapa.")
+        return False
+
+    map_location = find(r"legend_bot\images\by_map_go_to\map.png", confidence=0.8, debug=False)
+    if not map_location:
+        print("[ERRO] Mapa não encontrado na tela.")
+        return False
+
+    map_x, map_y, _, _ = map_location
+    offset_x, offset_y = MAP_LOCATIONS[place_name]
+
+    click_x = map_x + offset_x
+    click_y = map_y + offset_y
+
+    print(f"[INFO] Indo para '{place_name}' em ({click_x}, {click_y})")
+    click_position((click_x, click_y))
+    wait_time(2)
+
+    return True
