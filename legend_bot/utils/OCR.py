@@ -5,6 +5,7 @@ import time
 import cv2
 import numpy as np
 from utils.highlight import highlight_area
+from utils.screenVision import find
 
 # Caminho para o executável do Tesseract (ajuste conforme seu sistema)
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe" 
@@ -120,3 +121,93 @@ def find_text(target_text, region=None, lang="por", invert=False, debug=False, c
             return (abs_x, abs_y, w, h)
 
     return None
+
+def extract_text_near_image(
+    image_path,
+    offset=(100, 0, 150, 50),  # (dx, dy, largura, altura)
+    lang="por",
+    invert=False,
+    debug=True,
+    confidence=0.8
+):
+    """
+    Encontra uma imagem e extrai texto na região à frente dela.
+
+    Parâmetros:
+    - image_path: caminho da imagem a procurar (ex: ícone ou nome da propriedade).
+    - offset: (dx, dy, w, h) — deslocamento da região OCR em relação ao topo da imagem encontrada.
+    - lang: linguagem do OCR.
+    - invert: inverte a imagem para OCR (caso fundo escuro).
+    - debug: se True, destaca área OCR.
+    - confidence: nível de similaridade mínima para encontrar a imagem.
+
+    Retorna:
+    - texto extraído ou None.
+    """
+
+    pos = find(image_path, confidence=confidence, debug=debug)
+    if not pos:
+        print(f"[ERRO] Imagem {image_path} não encontrada.")
+        return None
+
+    x, y, w, h = pos  # top-left + w/h do match
+    dx, dy, ow, oh = offset
+
+    region_x = x + dx
+    region_y = y + dy
+    region = (region_x, region_y, ow, oh)
+
+    img = ImageGrab.grab(bbox=(region_x, region_y, region_x + ow, region_y + oh))
+    img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+
+    if invert:
+        img_cv = cv2.bitwise_not(img_cv)
+
+    text = pytesseract.image_to_string(img_cv, lang=lang).strip()
+
+    if debug:
+        highlight_area(region_x, region_y, ow, oh)
+        print(f"[OCR] Texto extraído: {text}")
+
+    return text if text else None
+
+def extract_text_from_position(
+    position,
+    offset=(100, 0, 150, 50),  # (dx, dy, largura, altura)
+    lang="por",
+    invert=False,
+    debug=True
+):
+    """
+    Extrai texto a partir de uma posição base, usando deslocamento.
+
+    Parâmetros:
+    - position: tupla (x, y) — ponto base na tela.
+    - offset: (dx, dy, w, h) — deslocamento e tamanho da região para OCR.
+    - lang: linguagem usada pelo Tesseract.
+    - invert: inverte as cores (útil para texto claro em fundo escuro).
+    - debug: se True, mostra destaque visual da área OCR.
+
+    Retorna:
+    - texto extraído (string) ou None se nada detectado.
+    """
+
+    base_x, base_y = position
+    dx, dy, ow, oh = offset
+
+    rx = base_x + dx
+    ry = base_y + dy
+
+    img = ImageGrab.grab(bbox=(rx, ry, rx + ow, ry + oh))
+    img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+
+    if invert:
+        img_cv = cv2.bitwise_not(img_cv)
+
+    text = pytesseract.image_to_string(img_cv, lang=lang).strip()
+
+    if debug:
+        highlight_area(rx, ry, ow, oh)
+        print(f"[OCR] Texto extraído: {text}")
+
+    return text if text else None
