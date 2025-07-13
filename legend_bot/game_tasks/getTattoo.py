@@ -1,7 +1,7 @@
 from core.repeatable_task import RepeatableTask
 from datetime import datetime
 
-from utils.general_use import go_to_Interface, move_mouse_outside_screen, find_in_eventBar
+from utils.general_use import go_to_Interface, move_mouse_outside_screen
 from utils.screenVision import exists, wait
 from utils.actions import wait_time, click, click_all
 from utils.regions import *

@@ -145,7 +145,7 @@ def wait_time(seconds):
         
         time.sleep(seconds)
 
-def click_all(image_path, confidence=0.8, delay_between=0.5, debug=True):
+def click_all(image_path, confidence=0.8, delay_between=1, debug=True):
     """
     Clica em todas as ocorrências de uma imagem na tela, com pequeno intervalo entre os cliques.
 
@@ -157,8 +157,25 @@ def click_all(image_path, confidence=0.8, delay_between=0.5, debug=True):
     positions = list_all(image_path, confidence=confidence, debug=debug)
 
     for pos in positions:
-        click(pos)
+        click_position(pos)
         wait_time(delay_between)
 
     if debug:
         print(f"[INFO] {len(positions)} clique(s) realizados.")
+
+def click_position(position):
+    """
+    Clica em uma posição fornecida.
+
+    - position: tupla (x, y) ou (x, y, w, h)
+    """
+    if len(position) == 2:
+        x, y = position
+    elif len(position) == 4:
+        x, y, w, h = position
+        x += w // 2
+        y += h // 2
+    else:
+        raise ValueError("A posição deve ser uma tupla com 2 ou 4 valores.")
+    pyautogui.moveTo(x, y)
+    pyautogui.click()
