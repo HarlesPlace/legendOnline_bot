@@ -1,6 +1,6 @@
 import pyautogui
 import time
-from utils.screenVision import wait, find
+from utils.screenVision import wait, find, list_all
 
 def hover(image_path, confidence=0.8, region=None):
     """
@@ -144,3 +144,21 @@ def wait_time(seconds):
             return None
         
         time.sleep(seconds)
+
+def click_all(image_path, confidence=0.8, delay_between=0.5, debug=True):
+    """
+    Clica em todas as ocorrências de uma imagem na tela, com pequeno intervalo entre os cliques.
+
+    - image_path: caminho da imagem a encontrar
+    - confidence: nível de confiança para correspondência
+    - delay_between: tempo (em segundos) entre cliques
+    - debug: ativa highlight e prints
+    """
+    positions = list_all(image_path, confidence=confidence, debug=debug)
+
+    for pos in positions:
+        click(pos)
+        wait_time(delay_between)
+
+    if debug:
+        print(f"[INFO] {len(positions)} clique(s) realizados.")
