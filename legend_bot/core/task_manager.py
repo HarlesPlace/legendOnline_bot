@@ -1,6 +1,10 @@
+
 class TaskManager:
-    def __init__(self, tasks):
-        self.tasks = tasks
+    def __init__(self, dailyTasks, fixedTasks, repeatableTasks):
+        self.dailyTasks = dailyTasks
+        self.fixedTasks = fixedTasks
+        self.repeatableTasks = repeatableTasks
+        self.tasks = dailyTasks + fixedTasks + repeatableTasks
 
     def run_all(self):
         for task in self.tasks:
