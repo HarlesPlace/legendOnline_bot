@@ -7,7 +7,7 @@ from utils.actions import wait_time, click, click_all
 from utils.regions import *
 
 class XPfarmColector(RepeatableTask):
-    def run(self):
+    def _run_task(self):
         """
         Implementa a lógica para coletar XP farm
         """

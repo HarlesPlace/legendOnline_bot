@@ -29,6 +29,11 @@ def maximizeGameWindow():
     if exists("legend_bot/images/maximize_Game_Window/maximizePermissionRequest.png", confidence=0.8, debug=False, region=TOP_BAR):
         click("legend_bot/images/maximize_Game_Window/confirmMaximizeButton.png", confidence=0.8, region=TOP_BAR)
         wait_time(3)
+
+    #se abriu algo por engano fecha
+    if exists(r"legend_bot\images\maximize_Game_Window\closeButton.png", confidence=0.8, debug=False, region=TOP_RIGHT):
+        click(r"legend_bot\images\maximize_Game_Window\closeButton.png", confidence=0.8, region=TOP_RIGHT)
+        wait_time(3)
     return True
 
 def go_to_Interface(interface_name):
@@ -92,20 +97,21 @@ def move_mouse_outside_screen():
     """
     pyautogui.moveTo(0, 0)
 
-def find_in_eventBar(image_path):
+def find_in_eventBar(image_path, confidence=0.9):
     """
     Encontra um elemento na barra de eventos.
     """
-    if exists(r"legend_bot\images\colect_Summer\eventsUncolapserButton.png",confidence=0.9, debug=False, region=TOP_BAR):
-        click(r"legend_bot\images\colect_Summer\eventsUncolapserButton.png",confidence=0.9, region=TOP_BAR)
+    if exists(r"legend_bot\images\find_in_eventBar\eventsUncolapserButton.png",confidence=0.8, debug=False, region=TOP_BAR):
+        click(r"legend_bot\images\find_in_eventBar\eventsUncolapserButton.png",confidence=0.8, region=TOP_BAR)
         wait_time(5)
     move_mouse_outside_screen()
-    if (not exists(image_path, confidence=0.9, debug=False, region=TOP_BAR)) and exists(r"legend_bot\images\find_in_eventBar\nextButton.png", confidence=0.9, debug=False, region=TOP_BAR):
-        click(r"legend_bot\images\find_in_eventBar\nextButton.png", confidence=0.9, region=TOP_BAR, debug=False)
-    elif ((not exists(image_path, confidence=0.9, debug=False, region=TOP_BAR)) and exists(r"legend_bot\images\find_in_eventBar\previewButton.png", confidence=0.9, debug=False, region=TOP_BAR)):
-        click(r"legend_bot\images\find_in_eventBar\previewButton.png", confidence=0.9, region=TOP_BAR, debug=False)
+    if (not exists(image_path, confidence=confidence, debug=False, region=TOP_BAR)) and exists(r"legend_bot\images\find_in_eventBar\nextButton.png", confidence=0.9, debug=False, region=TOP_BAR):
+        click(r"legend_bot\images\find_in_eventBar\nextButton.png", confidence=confidence, region=TOP_BAR, debug=False)
+    elif ((not exists(image_path, confidence=confidence, debug=False, region=TOP_BAR)) and exists(r"legend_bot\images\find_in_eventBar\previewButton.png", confidence=0.9, debug=False, region=TOP_BAR)):
+        click(r"legend_bot\images\find_in_eventBar\previewButton.png", confidence=confidence, region=TOP_BAR, debug=False)
     move_mouse_outside_screen()
-    if exists(image_path, confidence=0.9, debug=False, region=TOP_BAR):
+    wait_time(6)
+    if exists(image_path, confidence=confidence, debug=False, region=TOP_BAR):
         return True
     else:
         return False

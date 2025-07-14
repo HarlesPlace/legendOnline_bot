@@ -18,4 +18,9 @@ class RepeatableTask(BaseTask):
         Substitua este método nas subclasses com a lógica da tarefa.
         """
         print("Executando tarefa...")
+        self._run_task()
         self.last_time_executed = datetime.now()
+    
+    def _run_task(self):
+        """Sobrescreva esse método com a lógica real da tarefa."""
+        raise NotImplementedError
