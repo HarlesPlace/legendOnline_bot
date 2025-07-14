@@ -11,8 +11,8 @@ class DailyTask(BaseTask):
         return self.last_run_date != today
 
     def run(self):
-        self.last_run_date = date.today()
         self._run_task()
+        self.last_run_date = date.today()
 
     def _run_task(self):
         """Sobrescreva esse método com a lógica real da tarefa."""

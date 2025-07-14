@@ -1,7 +1,10 @@
-from utils.screenVision import exists, wait, find
+from utils.screenVision import exists, wait, find, wait_until_disappear
 from utils.actions import click, wait_time, click_position
 from utils.regions import *
 from utils.mapsCoords import MAP_LOCATIONS
+import pyautogui
+
+pyautogui.FAILSAFE = False
 
 def close_comunicates():
     """
@@ -39,6 +42,8 @@ def go_to_Interface(interface_name):
             if exists("legend_bot/images/go_to_Interface/castleButton.png", confidence=0.8, debug=False, region=TOP_RIGHT):
                 click("legend_bot/images/go_to_Interface/castleButton.png", confidence=0.8, region=TOP_RIGHT)
                 wait("legend_bot/images/go_to_Interface/skyButton.png", timeout=60, confidence=0.8, debug=False, region=TOP_RIGHT)
+                close_comunicates()
+                return True
             else:
                 print("[ERRO] Botão do castelo não encontrado.")
                 return False
@@ -49,6 +54,8 @@ def go_to_Interface(interface_name):
             if exists("legend_bot/images/go_to_Interface/skyButton.png", confidence=0.8, debug=False, region=TOP_RIGHT):
                 click("legend_bot/images/go_to_Interface/skyButton.png", confidence=0.8, region=TOP_RIGHT)
                 wait("legend_bot/images/go_to_Interface/castleButton.png", timeout=60, confidence=0.8, debug=False, region=TOP_RIGHT)
+                close_comunicates()
+                return True
             else:
                 print("[ERRO] Botão do reino do céu não encontrado.")
                 return False
@@ -83,7 +90,7 @@ def move_mouse_outside_screen():
     """
     Move o cursor para fora da tela visível, evitando tooltips e interferência em OCR/imagem.
     """
-    pyautogui.moveTo(SCREEN_WIDTH + 100, SCREEN_HEIGHT + 100)
+    pyautogui.moveTo(0, 0)
 
 def find_in_eventBar(image_path):
     """
@@ -135,6 +142,8 @@ def by_map_go_to(place_name):
 
     print(f"[INFO] Indo para '{place_name}' em ({click_x}, {click_y})")
     click_position((click_x, click_y))
-    wait_time(2)
-
-    return True
+    if wait_until_disappear(r"legend_bot\images\by_map_go_to\map.png", timeout=60, confidence=0.8, region=FULL_SCREEN):
+        return True
+    else:
+        return False
+ 

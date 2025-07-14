@@ -122,51 +122,55 @@ def find_text(target_text, region=None, lang="por", invert=False, debug=False, c
 
     return None
 
-def extract_text_near_image(
+def extract_text_right_of_image(
     image_path,
-    offset=(100, 0, 150, 50),  # (dx, dy, largura, altura)
+    width=100,
     lang="por",
     invert=False,
-    debug=True,
-    confidence=0.8
+    debug=False,
+    confidence=0.8,
+    only_numbers=False
 ):
     """
-    Encontra uma imagem e extrai texto na região à frente dela.
+    Encontra uma imagem e extrai texto à direita dela, usando OCR.
 
     Parâmetros:
-    - image_path: caminho da imagem a procurar (ex: ícone ou nome da propriedade).
-    - offset: (dx, dy, w, h) — deslocamento da região OCR em relação ao topo da imagem encontrada.
-    - lang: linguagem do OCR.
-    - invert: inverte a imagem para OCR (caso fundo escuro).
-    - debug: se True, destaca área OCR.
-    - confidence: nível de similaridade mínima para encontrar a imagem.
+    - image_path: caminho da imagem a ser localizada.
+    - width: largura da região à direita da imagem que será usada para OCR.
+    - lang: idioma a ser usado no OCR (padrão: "por").
+    - invert: se True, inverte as cores da imagem para OCR (útil para fundos escuros).
+    - debug: se True, destaca visualmente a área e imprime o texto extraído.
+    - confidence: nível mínimo de similaridade para reconhecer a imagem.
+    - only_numbers: se True, restringe o OCR para detectar apenas dígitos numéricos.
 
     Retorna:
-    - texto extraído ou None.
+    - Texto extraído ou None se nada encontrado.
     """
-
     pos = find(image_path, confidence=confidence, debug=debug)
     if not pos:
-        print(f"[ERRO] Imagem {image_path} não encontrada.")
+        print(f"[ERRO] Imagem '{image_path}' não encontrada.")
         return None
 
-    x, y, w, h = pos  # top-left + w/h do match
-    dx, dy, ow, oh = offset
+    x, y, w, h = pos
+    region_x = x + w
+    region_y = y
+    region_w = width
+    region_h = h
 
-    region_x = x + dx
-    region_y = y + dy
-    region = (region_x, region_y, ow, oh)
-
-    img = ImageGrab.grab(bbox=(region_x, region_y, region_x + ow, region_y + oh))
+    img = ImageGrab.grab(bbox=(region_x, region_y, region_x + region_w, region_y + region_h))
     img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
 
     if invert:
         img_cv = cv2.bitwise_not(img_cv)
 
-    text = pytesseract.image_to_string(img_cv, lang=lang).strip()
+    config = ""
+    if only_numbers:
+        config = "--psm 6 -c tessedit_char_whitelist=0123456789"
+
+    text = pytesseract.image_to_string(img_cv, lang=lang, config=config).strip()
 
     if debug:
-        highlight_area(region_x, region_y, ow, oh)
+        highlight_area(region_x, region_y, region_w, region_h)
         print(f"[OCR] Texto extraído: {text}")
 
     return text if text else None
@@ -176,7 +180,8 @@ def extract_text_from_position(
     offset=(100, 0, 150, 50),  # (dx, dy, largura, altura)
     lang="por",
     invert=False,
-    debug=True
+    debug=False,
+    only_numbers=False,
 ):
     """
     Extrai texto a partir de uma posição base, usando deslocamento.
@@ -187,6 +192,7 @@ def extract_text_from_position(
     - lang: linguagem usada pelo Tesseract.
     - invert: inverte as cores (útil para texto claro em fundo escuro).
     - debug: se True, mostra destaque visual da área OCR.
+    - only_numbers: se True, restringe o OCR para detectar apenas dígitos numéricos.
 
     Retorna:
     - texto extraído (string) ou None se nada detectado.
@@ -204,7 +210,11 @@ def extract_text_from_position(
     if invert:
         img_cv = cv2.bitwise_not(img_cv)
 
-    text = pytesseract.image_to_string(img_cv, lang=lang).strip()
+    config = ""
+    if only_numbers:
+        config = "--psm 6 -c tessedit_char_whitelist=0123456789"
+
+    text = pytesseract.image_to_string(img_cv, lang=lang, config=config).strip()
 
     if debug:
         highlight_area(rx, ry, ow, oh)

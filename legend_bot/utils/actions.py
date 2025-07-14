@@ -170,9 +170,9 @@ def click_position(position):
     - position: tupla (x, y) ou (x, y, w, h)
     """
     if len(position) == 2:
-        x, y = position
+        x, y = map(int, position)
     elif len(position) == 4:
-        x, y, w, h = position
+        x, y, w, h = map(int, position)
         x += w // 2
         y += h // 2
     else:

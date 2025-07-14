@@ -75,7 +75,7 @@ def wait(image_path, timeout=10, confidence=0.8, debug=True, region=None):
         time.sleep(1)
 
 
-def find(image_path, confidence=0.8, debug=True, region=None):
+def find(image_path, confidence=0.8, debug=False, region=None):
     """
     Procura uma imagem na tela ou em uma região especificada.
     
@@ -127,7 +127,7 @@ def exists(image_path, confidence=0.8, debug=False, region=None):
     """
     return find(image_path, confidence=confidence, debug=debug, region=region) is not None
 
-def list_all(image_path, confidence=0.8, debug=True, min_distance=10):
+def list_all(image_path, confidence=0.8, debug=False, min_distance=10):
     """
     Encontra todas as ocorrências da imagem na tela.
     Retorna uma lista com as posições (x, y) centrais encontradas.
@@ -195,3 +195,36 @@ def wait_until_disappear(image_path, timeout=15, confidence=0.9, region=None):
             return False
 
         time.sleep(1)
+
+def check_right(position, image_path, offset=(20, -20), region_size=(100, 40), confidence=0.8, debug=False):
+    """
+    Para cada posição, verifica se a imagem está à direita e clica se encontrar.
+
+    - positions: (x, y)
+    - image_path: imagem a ser procurada
+    - offset: deslocamento da região relativa à posição base
+    - region_size: tamanho da área onde buscar a imagem (w, h)
+    - confidence: limiar de similaridade
+    - debug: se True, imprime e destaca
+
+    Retorna: lista de posições onde o clique foi feito.
+    """
+
+    x, y = position
+    dx, dy = offset
+    rw, rh = region_size
+    rx = x + dx
+    ry = y + dy
+
+    region = (rx, ry, rw, rh)
+    highlight_area(rx, ry, rw, rh)
+    result = find(image_path, confidence=confidence, debug=debug, region=region)
+    
+    if result:
+        center_x = result[0] + result[2] // 2
+        center_y = result[1] + result[3] // 2
+        return (center_x, center_y)
+    else:
+        if debug:
+            print(f"[DEBUG] Imagem '{image_path}' não encontrada na região {region}.")
+        return None
