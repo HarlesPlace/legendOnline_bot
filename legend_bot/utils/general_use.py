@@ -64,6 +64,8 @@ def go_to_Interface(interface_name):
             else:
                 print("[ERRO] Botão do reino do céu não encontrado.")
                 return False
+    else:
+        raise ValueError
             
 def prepare_window():
     """
