@@ -1,5 +1,4 @@
 from core.repeatable_task import RepeatableTask
-from datetime import datetime
 
 from utils.general_use import move_mouse_outside_screen, find_in_eventBar
 from utils.screenVision import exists, wait
@@ -34,5 +33,4 @@ class CollectSummer(RepeatableTask):
             print("[INFO] Botão de entrada na coleta verão não encontrado ou a tarefa não está em execução.")
             return False
         
-        self.last_time_executed = datetime.now()
         return True
