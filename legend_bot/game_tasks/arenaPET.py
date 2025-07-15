@@ -1,13 +1,11 @@
 from core.daily_task import DailyTask
-from datetime import datetime
-
 from utils.general_use import open_map, by_map_go_to, move_mouse_outside_screen
 from utils.screenVision import exists, wait, find, list_all, check_right, wait_until_disappear
 from utils.actions import wait_time, click, click_position
 from utils.regions import *
 from utils.OCR import extract_text_right_of_image, extract_text_from_position
 
-class arenaPET(DailyTask):
+class ArenaPET(DailyTask):
     def _run_task(self):
         if open_map():
             if by_map_go_to("ArenaPET"):

@@ -2,7 +2,7 @@ import pytesseract
 from PIL import ImageOps, ImageGrab, Image
 import pyautogui
 import time
-import cv2
+import cv2, re
 import numpy as np
 from utils.highlight import highlight_area
 from utils.screenVision import find
@@ -175,6 +175,63 @@ def extract_text_right_of_image(
 
     return text if text else None
 
+def extract_text_left_of_image(
+    image_path,
+    width=100,
+    lang="por",
+    invert=False,
+    debug=False,
+    confidence=0.8,
+    only_numbers=False
+):
+    """
+    Encontra uma imagem e extrai texto à esquerda dela, usando OCR.
+
+    Parâmetros:
+    - image_path: caminho da imagem a ser localizada.
+    - width: largura da região à esquerda da imagem que será usada para OCR.
+    - lang: idioma a ser usado no OCR (padrão: "por").
+    - invert: se True, inverte as cores da imagem para OCR (útil para fundos escuros).
+    - debug: se True, destaca visualmente a área e imprime o texto extraído.
+    - confidence: nível mínimo de similaridade para reconhecer a imagem.
+    - only_numbers: se True, restringe o OCR para detectar apenas dígitos numéricos.
+
+    Retorna:
+    - Texto extraído ou None se nada encontrado.
+    """
+    pos = find(image_path, confidence=confidence, debug=debug)
+    if not pos:
+        print(f"[ERRO] Imagem '{image_path}' não encontrada.")
+        return None
+
+    x, y, w, h = pos
+    region_x = x - width
+    region_y = y
+    region_w = width
+    region_h = h
+
+    # Protege contra valores negativos
+    if region_x < 0:
+        region_x = 0
+
+    img = ImageGrab.grab(bbox=(region_x, region_y, region_x + region_w, region_y + region_h))
+    img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+
+    if invert:
+        img_cv = cv2.bitwise_not(img_cv)
+
+    config = ""
+    if only_numbers:
+        config = "--psm 6 -c tessedit_char_whitelist=0123456789"
+
+    text = pytesseract.image_to_string(img_cv, lang=lang, config=config).strip()
+
+    if debug:
+        highlight_area(region_x, region_y, region_w, region_h)
+        print(f"[OCR] Texto extraído: {text}")
+
+    return text if text else None
+
 def extract_text_from_position(
     position,
     offset=(100, 0, 150, 50),  # (dx, dy, largura, altura)
@@ -184,21 +241,29 @@ def extract_text_from_position(
     only_numbers=False,
 ):
     """
-    Extrai texto a partir de uma posição base, usando deslocamento.
+    Extrai texto a partir de uma posição ou região base, usando deslocamento.
 
     Parâmetros:
-    - position: tupla (x, y) — ponto base na tela.
-    - offset: (dx, dy, w, h) — deslocamento e tamanho da região para OCR.
+    - position: tupla (x, y) ou (x, y, w, h)
+    - offset: (dx, dy, w, h) — deslocamento em relação à posição base.
     - lang: linguagem usada pelo Tesseract.
     - invert: inverte as cores (útil para texto claro em fundo escuro).
     - debug: se True, mostra destaque visual da área OCR.
-    - only_numbers: se True, restringe o OCR para detectar apenas dígitos numéricos.
+    - only_numbers: se True, restringe o OCR para detectar apenas dígitos numéricos ou %.
 
     Retorna:
-    - texto extraído (string) ou None se nada detectado.
+    - número ou texto extraído (como int, float ou string), ou None se nada detectado.
     """
+    if len(position) == 2:
+        base_x, base_y = position
+    elif len(position) == 4:
+        base_x, base_y, w, h = position
+        base_x = base_x + w  # posiciona OCR à direita da região
+        base_y = base_y  # altura será reutilizada mais adiante
+    else:
+        raise ValueError("A posição deve ser uma tupla com 2 ou 4 valores.")
 
-    base_x, base_y = position
+    dx, dy, ow, oh = offset
     dx, dy, ow, oh = offset
 
     rx = base_x + dx
@@ -212,12 +277,20 @@ def extract_text_from_position(
 
     config = ""
     if only_numbers:
-        config = "--psm 6 -c tessedit_char_whitelist=0123456789"
+        config = "--psm 6 -c tessedit_char_whitelist=0123456789%"
 
     text = pytesseract.image_to_string(img_cv, lang=lang, config=config).strip()
 
     if debug:
         highlight_area(rx, ry, ow, oh)
         print(f"[OCR] Texto extraído: {text}")
+    
+    # Regex: captura número seguido de % (como "75%", "100%")
+    if only_numbers:
+        match = re.search(r'(\d+(?:[.,]\d+)?)%', text)
+        if match:
+            return match.group(1).replace(',', '.')  # retorna como string numérica
+        else:
+            return None
 
     return text if text else None

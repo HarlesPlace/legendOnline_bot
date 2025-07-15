@@ -14,6 +14,23 @@ def hover(image_path, confidence=0.8, region=None):
     print("[ERRO] Imagem não encontrada para hover.")
     return False
 
+def hover_position(position, duration=0.3):
+    """
+    Move o mouse até a posição (x, y) fornecida.
+
+    Parâmetros:
+    - position: tupla (x, y)
+    - duration: tempo (em segundos) para o movimento do cursor
+    """
+    if position and len(position) == 2:
+        x, y = map(int,position)
+        pyautogui.moveTo(x, y, duration=duration)
+        print(f"[INFO] Mouse movido até {position}")
+        return True
+    else:
+        print("[ERRO] Posição inválida fornecida para hover.")
+        return False
+    
 def click(image_path, confidence=0.8, region=None):
     """
     Clica no centro da imagem detectada na tela.
