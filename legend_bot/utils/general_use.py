@@ -80,13 +80,14 @@ def prepare_window():
     if exists("legend_bot/images/prepare_window/hidePlayersButton.png", confidence=0.95, debug=False, region=TOP_RIGHT):
         click("legend_bot/images/prepare_window/hidePlayersButton.png", confidence=0.95, region=TOP_RIGHT)
         wait_time(3)
-    if exists("legend_bot/images/prepare_window/chatColapseControl.png", confidence=0.95, debug=False, region=BOTTOM_LEFT):
-        especificPlace=find("legend_bot/images/prepare_window/chatColapseControl.png", confidence=0.8, region=BOTTOM_LEFT, debug=False)
-        print(f"[INFO] Especific place found: {especificPlace}")
-        click("legend_bot/images/prepare_window/chatColapserButton.png", confidence=0.8, region=especificPlace)
-        wait_time(3)
-        click("legend_bot/images/prepare_window/chatColapserButton.png", confidence=0.8, region=especificPlace)
-        wait_time(3)
+    if not exists(r"legend_bot\images\prepare_window\chatColapsedIndicator.png", confidence=0.8, region=BOTTOM_LEFT):
+        if exists("legend_bot/images/prepare_window/chatColapseControl.png", confidence=0.95, debug=False, region=BOTTOM_LEFT):
+            especificPlace=find("legend_bot/images/prepare_window/chatColapseControl.png", confidence=0.8, region=BOTTOM_LEFT, debug=False)
+            print(f"[INFO] Especific place found: {especificPlace}")
+            click("legend_bot/images/prepare_window/chatColapserButton.png", confidence=0.8, region=especificPlace)
+            wait_time(3)
+            click("legend_bot/images/prepare_window/chatColapserButton.png", confidence=0.8, region=especificPlace)
+            wait_time(3)
 
 def closeMissionBar():
     if exists("legend_bot/images/prepare_window/missionsColapserButton.png", confidence=0.9, debug=False, region=TOP_RIGHT):

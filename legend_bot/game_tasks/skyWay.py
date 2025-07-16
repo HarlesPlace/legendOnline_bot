@@ -56,6 +56,7 @@ class SkyWay(DailyTask):
                                 i+=1
                                 print(f"[SKY WAY] Desafio, tentando o próximo: {i+1}")
                         click(r"legend_bot\images\sky_way\skyWayExitButton.png", region=BOTTOM_RIGHT, confidence=0.8)
+                        return True
                     else:
                         print("[SKY WAY] Não foi possível abrir a janela do Caminho do Céu.")
                         return False

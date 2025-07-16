@@ -86,7 +86,7 @@ def find(image_path, confidence=0.8, debug=False, region=None):
     - region: tupla opcional (x, y, w, h) para limitar a área de busca.
     
     Retorna:
-    - (x, y): centro da imagem encontrada, ou None.
+    - (x, y, w, h): região imagem encontrada, ou None.
     """
     if region:
         x, y, w, h = region
@@ -163,6 +163,40 @@ def list_all(image_path, confidence=0.8, debug=False, min_distance=10):
         print(f"[INFO] {len(positions)} ocorrência(s) encontradas.")
 
     return positions
+
+def find_all(image_path, confidence=0.8, debug=False, min_distance=10):
+    """
+    Encontra todas as ocorrências da imagem na tela.
+    Retorna uma lista com as regiões (x, y, w, h) encontradas.
+    """
+    screenshot = pyautogui.screenshot()
+    screenshot = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
+
+    template = cv2.imread(image_path, cv2.IMREAD_COLOR)
+    if template is None:
+        raise FileNotFoundError(f"Imagem não encontrada: {image_path}")
+
+    h, w = template.shape[:2]
+
+    result = cv2.matchTemplate(screenshot, template, cv2.TM_CCOEFF_NORMED)
+    y_coords, x_coords = np.where(result >= confidence)
+
+    regions = []
+    for (x, y) in zip(x_coords, y_coords):
+        # Verifica se já existe uma região próxima
+        is_duplicate = any(
+            abs(x - rx) < min_distance and abs(y - ry) < min_distance
+            for (rx, ry, rw, rh) in regions
+        )
+        if not is_duplicate:
+            regions.append((x, y, w, h))
+            if debug:
+                highlight_area(x, y, w, h)
+
+    if debug:
+        print(f"[INFO] {len(regions)} ocorrência(s) encontradas.")
+
+    return regions
 
 def wait_until_disappear(image_path, timeout=15, confidence=0.9, region=None):
     """
