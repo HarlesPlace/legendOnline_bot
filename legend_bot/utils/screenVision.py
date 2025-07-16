@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import pyautogui
 import time
+import threading
 from utils.highlight import highlight_area
 from PIL import ImageGrab
 from core.control import wait_if_paused_or_error
@@ -262,3 +263,55 @@ def check_right(position, image_path, offset=(20, -20), region_size=(100, 40), c
         if debug:
             print(f"[DEBUG] Imagem '{image_path}' não encontrada na região {region}.")
         return None
+
+class RegionChangeObserver:
+    def __init__(self, region, threshold=1000, interval=0.5, debug=False):
+        """
+        :param region: (x, y, w, h) da área a ser observada
+        :param threshold: número mínimo de pixels diferentes para considerar mudança
+        :param interval: tempo entre capturas em segundos
+        :param debug: imprime informações
+        """
+        self.region = region
+        self.threshold = threshold
+        self.interval = interval
+        self.debug = debug
+        self._stop_event = threading.Event()
+        self._changed = False
+        self._thread = None
+
+    def _observe_loop(self):
+        x, y, w, h = self.region
+        screenshot1 = pyautogui.screenshot(region=(x, y, w, h))
+        screenshot1 = cv2.cvtColor(np.array(screenshot1), cv2.COLOR_RGB2BGR)
+
+        while not self._stop_event.is_set():
+            time.sleep(self.interval)
+            screenshot2 = pyautogui.screenshot(region=(x, y, w, h))
+            screenshot2 = cv2.cvtColor(np.array(screenshot2), cv2.COLOR_RGB2BGR)
+
+            diff = cv2.absdiff(screenshot1, screenshot2)
+            gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
+            _, thresh = cv2.threshold(gray, 25, 255, cv2.THRESH_BINARY)
+            changed_pixels = cv2.countNonZero(thresh)
+
+            if self.debug:
+                print(f"[Observer] Mudança detectada: {changed_pixels} pixels")
+
+            if changed_pixels > self.threshold:
+                self._changed = True
+                break
+
+    def start(self):
+        self._stop_event.clear()
+        self._changed = False
+        self._thread = threading.Thread(target=self._observe_loop)
+        self._thread.start()
+
+    def stop(self):
+        self._stop_event.set()
+        if self._thread is not None:
+            self._thread.join()
+
+    def get_result(self):
+        return self._changed

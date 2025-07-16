@@ -14,10 +14,6 @@ class RepeatableTask(BaseTask):
         return elapsed >= timedelta(minutes=30)
 
     def run(self):
-        """
-        Substitua este método nas subclasses com a lógica da tarefa.
-        """
-        print("Executando tarefa...")
         self._run_task()
         self.last_time_executed = datetime.now()
     
