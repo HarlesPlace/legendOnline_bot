@@ -9,7 +9,7 @@ MAP_LOCATIONS = {
     "SalaoJogo": (229, 146),
     "GuardiaoCeleste": (206, 202),
     "AbismoSemfim": (181, 241),
-    "AntuarioTitan": (121, 230),
+    "SantuarioTitan": (121, 230),
     "ContinenteDemonios": (66, 213),
     "JulgamentoPrincipal": (79, 249),
     "TemploEcliptico": (111, 294),

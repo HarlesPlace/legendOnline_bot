@@ -156,3 +156,30 @@ def by_map_go_to(place_name):
     else:
         return False
  
+def sort_screen_matches(ocorrencias, axis='w'):
+    """
+    Ordena as ocorrências de imagem com base em sua posição na tela.
+
+    :param ocorrencias: lista de tuplas (x, y) ou (x, y, w, h)
+    :param axis: 'w' para ordenar por coluna (esquerda→direita),
+                 'h' para ordenar por linha (cima→baixo)
+    :return: lista ordenada de ocorrências
+    """
+    if not ocorrencias:
+        return []
+
+    if axis not in ('w', 'h'):
+        raise ValueError("Parâmetro 'axis' deve ser 'w' ou 'h'")
+
+    def get_coord(item):
+        # Se for (x, y)
+        if len(item) == 2:
+            return item[0] if axis == 'w' else item[1]
+        # Se for (x, y, w, h)
+        elif len(item) == 4:
+            x, y, w, h = item
+            return x + w // 2 if axis == 'w' else y + h // 2
+        else:
+            raise ValueError("Cada item deve ser uma tupla de 2 ou 4 elementos")
+
+    return sorted(ocorrencias, key=get_coord)

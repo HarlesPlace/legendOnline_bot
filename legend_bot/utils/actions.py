@@ -42,7 +42,7 @@ def click(image_path, confidence=0.8, region=None):
     print("[ERRO] Não foi possível clicar (imagem não encontrada).")
     return False
 
-def type_text(text, BeforeImage_path = None, AfterImage_path=None, timeout=10, confidence=0.8, press_enter=False, clear_first=False):
+def type_text(text, BeforeImage_path = None, AfterImage_path=None, confidence=0.8, press_enter=False, clear_first=False):
     """
     Digita o texto fornecido. Se image_path for dado, clica na área antes de digitar.
     
@@ -50,29 +50,28 @@ def type_text(text, BeforeImage_path = None, AfterImage_path=None, timeout=10, c
     - text: Texto a ser digitado
     - BeforeImage_path: Imagem da caixa de texto para clicar (opcional)
     - AfterImage_path: Imagem para clicar após digitar (opcional)
-    - timeout: Tempo máximo para esperar a imagem (se fornecida)
     - confidence: Similaridade mínima (se usar imagem)
     - press_enter: Pressiona Enter após digitar?
     - clear_first: Pressiona Ctrl+A + Delete antes de digitar?
     """
     if BeforeImage_path:
-        if not click(BeforeImage_path, timeout=timeout, confidence=confidence):
-            print("[ERRO] Caixa de texto não encontrada para digitar.")
+        if not click(BeforeImage_path, confidence=confidence):
+            print("[ERRO] Caixa de texto não encontrada para digitar. Antes")
             return False
-        time.sleep(0.2)  # Pequeno delay após clicar
+        time.sleep(0.5)  # Pequeno delay após clicar
 
+    pyautogui.hotkey('ctrl', 'a')
+    time.sleep(0.3)
     if clear_first:
-        pyautogui.hotkey('ctrl', 'a')
-        time.sleep(0.1)
         pyautogui.press('delete')
 
     pyautogui.write(text, interval=0.05)
 
     if AfterImage_path:
-        if not click(AfterImage_path, timeout=timeout, confidence=confidence):
-            print("[ERRO] Caixa de texto não encontrada para digitar.")
+        if not click(AfterImage_path, confidence=confidence):
+            print("[ERRO] Caixa de texto não encontrada para digitar. Depois")
             return False
-        time.sleep(0.2)  # Pequeno delay após clicar
+        time.sleep(0.5)  # Pequeno delay após clicar
         
     if press_enter:
         pyautogui.press('enter')
@@ -196,3 +195,4 @@ def click_position(position):
         raise ValueError("A posição deve ser uma tupla com 2 ou 4 valores.")
     pyautogui.moveTo(x, y)
     pyautogui.click()
+    return True
