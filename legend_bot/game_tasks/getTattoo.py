@@ -5,8 +5,16 @@ from utils.general_use import go_to_Interface, move_mouse_outside_screen
 from utils.screenVision import exists, wait
 from utils.actions import wait_time, click, click_all
 from utils.regions import *
+from datetime import timedelta
 
 class GetTattoo(RepeatableTask):
+    def __init__(self):
+        super().__init__()
+        self.interval = timedelta(minutes=90)
+        self.blackout_hours = []
+        self.allowed_weekdays = [0, 1, 2, 3, 4, 5, 6]
+        self.priority = 6
+
     def _run_task(self):
         """
         Implementa a lógica para coletar tatuagem

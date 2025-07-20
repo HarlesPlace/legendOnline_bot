@@ -44,29 +44,42 @@ class TaskManager:
         fixed = self._get_runnable_task(self.fixedTasks)
         if fixed:
             return fixed
-        # 2. Alternância entre tarefas diárias e contínuas
+
+        # 2. Verifica se há tarefas elegíveis em cada grupo
+        daily_task = self._get_runnable_task(self.dailyTasks)
+        repeatable_task = self._get_runnable_task(self.repeatableTasks)
+
+        # 3. Alternância entre tipos, mas prioriza a disponível
         if self.lastTaskType == "Daily":
-            task = self._get_runnable_task(self.repeatableTasks)
-            if task:
+            if repeatable_task:
                 self.lastTaskType = "Repeatable"
-                return task
+                return repeatable_task
+            elif daily_task:
+                # Continua com Daily, já que Repeatable não está disponível
+                return daily_task
         elif self.lastTaskType == "Repeatable":
-            task = self._get_runnable_task(self.dailyTasks)
-            if task:
+            if daily_task:
                 self.lastTaskType = "Daily"
-                return task
-        # 3. Reexecutar tarefas com erro, se possível
+                return daily_task
+            elif repeatable_task:
+                return repeatable_task
+
+        # 4. Se nenhuma das anteriores, reexecutar tarefas com erro
         if self.errorTasks:
             task, retry_count = self.errorTasks.pop(0)
             if retry_count < self.max_retries:
                 print(f"[TAREFA] Reexecutando após erro: {task.__class__.__name__} (tentativa {retry_count + 1})")
                 return task
             else:
-                print(f"[ERRO] {task.__class__.__name__} excedeu número máximo de tentativas.") 
+                print(f"[ERRO] {task.__class__.__name__} excedeu número máximo de tentativas.")
+
         return None
+    
     def _get_runnable_task(self, task_list):
-        for task in task_list:
+        # Ordena as tasks por prioridade crescente
+        sorted_tasks = sorted(task_list, key=lambda task: getattr(task, "priority", 5))  # prioridade padrão = 5
+        for task in sorted_tasks:
             if task.should_run():
-                print(f"[TAREFA] {task.__class__.__name__} deve rodar agora")
+                print(f"[TAREFA] {task.__class__.__name__} deve rodar agora (prioridade {task.priority})")
                 return task
         return None

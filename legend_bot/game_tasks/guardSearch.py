@@ -6,6 +6,12 @@ from utils.actions import wait_time, click, click_position
 from utils.regions import *
 
 class GuardSearch(DailyTask):
+    def __init__(self):
+        super().__init__()
+        self.blackout_hours = []
+        self.allowed_weekdays = [0, 1, 2, 3, 4, 5, 6]
+        self.priority = 5
+
     def _run_task(self):
         """
         Implementa a lógica para coletar os guardioes procurados.

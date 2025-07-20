@@ -4,8 +4,16 @@ from utils.general_use import open_map, by_map_go_to, sort_screen_matches
 from utils.screenVision import exists, wait, find, find_all
 from utils.actions import wait_time, click, click_position, type_text
 from utils.regions import *
+from datetime import timedelta
 
 class DemonCountry(RepeatableTask):
+    def __init__(self):
+        super().__init__()
+        self.interval = timedelta(minutes=30)
+        self.blackout_hours = []
+        self.allowed_weekdays = [0, 1, 2, 3, 4, 5, 6]
+        self.priority = 5 
+
     def _run_task(self):
         """
         Implementa a lógica para coletar continente do demônio

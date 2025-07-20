@@ -5,6 +5,7 @@ import time
 PAUSED = False
 STOP = False
 ERROR = False
+DEBUG = False
 
 def pause_or_continue():
     global PAUSED

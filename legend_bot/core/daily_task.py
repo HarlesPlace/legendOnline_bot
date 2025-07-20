@@ -2,12 +2,14 @@ from datetime import date, datetime
 from core.base_task import BaseTask
 
 class DailyTask(BaseTask):
-    def __init__(self, blackout_hours=None, allowed_weekdays=None):
+    def __init__(self):
         self.running = True
         self.last_run_date = None
+        self.done = False
         self.error = False
-        self.blackout_hours = blackout_hours or []
-        self.allowed_weekdays = allowed_weekdays  # Ex: [0, 1, 2, 3, 4] para dias úteis
+        self.blackout_hours = []
+        self.allowed_weekdays = []  # Ex: [0, 1, 2, 3, 4] para dias úteis
+        self.priority = 9 # Ex: int de 0 a 9, sendo 0 a maior prioridade
 
     def _is_in_blackout(self):
         current_hour = datetime.now().hour
@@ -25,8 +27,14 @@ class DailyTask(BaseTask):
         return not self._is_in_blackout() and self._is_weekday_allowed()
 
     def run(self):
-        self._run_task()
+        success = self._run_task()
         self.last_run_date = date.today()
+        if success:
+            self.done = True
+            return True
+        else:
+            self.error = True
+            return False
 
     def _run_task(self):
         """Sobrescreva esse método com a lógica real da tarefa."""

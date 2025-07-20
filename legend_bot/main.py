@@ -14,10 +14,10 @@ from game_tasks.skyWay import SkyWay
 from game_tasks.surroundingsSearch import SurroundingsSearch
 from game_tasks.xpFarmColect import XPfarmColector
 
-continuosTasks_list = [DemonCountry(), CollectSummer(), GetTattoo(),
-                       Navigation(), CollectOnlinePacket(), PlantCrops(),
+continuosTasks_list = [CollectOnlinePacket(), CollectSummer(), DemonCountry(), GetTattoo(),
+                       Navigation(), PlantCrops(),
                        XPfarmColector()]
-fixedTimeTasks_list = [Fishing()]
+fixedTimeTasks_list = []
 dailyTimeTasks_list = [ArenaPET(), GuardSearch(), SkyWay(),
                        SurroundingsSearch()]
 

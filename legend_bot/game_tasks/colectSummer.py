@@ -4,8 +4,16 @@ from utils.general_use import move_mouse_outside_screen, find_in_eventBar
 from utils.screenVision import exists, wait
 from utils.actions import wait_time, click
 from utils.regions import *
+from datetime import timedelta
 
 class CollectSummer(RepeatableTask):
+    def __init__(self):
+        super().__init__()
+        self.interval = timedelta(minutes=30)
+        self.blackout_hours = []
+        self.allowed_weekdays = [0, 1, 2, 3, 4, 5, 6]
+        self.priority = 1 
+
     def _run_task(self):
         """
         Implementa a lógica para coletar o evento de verão.

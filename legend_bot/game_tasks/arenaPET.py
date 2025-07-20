@@ -6,6 +6,12 @@ from utils.regions import *
 from utils.OCR import extract_text_right_of_image, extract_text_from_position
 
 class ArenaPET(DailyTask):
+    def __init__(self):
+        super().__init__()
+        self.blackout_hours = []
+        self.allowed_weekdays = [0, 1, 2, 3, 4, 5, 6]
+        self.priority = 5 
+
     def _run_task(self):
         if open_map():
             if by_map_go_to("ArenaPET"):
@@ -22,18 +28,37 @@ class ArenaPET(DailyTask):
                             enemyPower=[]
                             chalengeButtonLocations = []
                             for k in range(j):
-                                enemyPower.append(int(extract_text_from_position(allOpponentsLocations[k], offset=(30,-10,90,20), invert=True, only_numbers=True)))
-                                chalengeButtonLocations.append(check_right(position=allOpponentsLocations[k], image_path= r"legend_bot\images\arena_PET\chalengeButton.png", 
-                                                                           offset=(20, -70), region_size=(200, 100), confidence=0.8, debug=True))
+                                try:
+                                    power = extract_text_from_position(allOpponentsLocations[k], offset=(30,-10,90,20), invert=True, only_numbers=True)
+                                    enemyPower.append(int(power))
+                                except (TypeError, ValueError):
+                                    # Se não conseguir extrair um número válido, assume um valor alto de poder
+                                    enemyPower.append(9999999)
+                                    print(f"[ARENA PET] Poder do inimigo {k} não reconhecido. Assumindo valor alto.")
+                                position = check_right(position=allOpponentsLocations[k],
+                                                       image_path= r"legend_bot\images\arena_PET\chalengeButton.png", 
+                                                       offset=(20, -70), region_size=(200, 100), confidence=0.8, debug=True)
+                                chalengeButtonLocations.append(position)
                             print(f"[ARENA PET] Poder dos oponentes: {enemyPower}")
                             print(f"[ARENA PET] Botões de desafio encontrados: {chalengeButtonLocations}")
                             if len(enemyPower) > 0:
-                                minPower = min(enemyPower)
-                                minPowerIndex = enemyPower.index(minPower)
-                                print(f"[ARENA PET] Desafiando oponente {minPowerIndex} com poder {minPower}.")
-                                move_mouse_outside_screen()
-                                click_position(chalengeButtonLocations[minPowerIndex])
-                                wait_time(2)
+                                try:
+                                    # Lista de índices ordenados por poder do inimigo (menor para maior)
+                                    sorted_indices = sorted(range(len(enemyPower)), key=lambda i: enemyPower[i])
+                                    for idx in sorted_indices:
+                                        btn = chalengeButtonLocations[idx]
+                                        if btn is not None:
+                                            minPower = enemyPower[idx]
+                                            print(f"[ARENA PET] Desafiando oponente {idx} com poder {minPower}.")
+                                            move_mouse_outside_screen()
+                                            click_position(btn)
+                                            wait_time(2)
+                                            break
+                                    else:
+                                        raise ValueError("Todos os botões de oponentes estão como None.")
+                                except Exception as e:
+                                    print(f"[ERRO] Falha ao desafiar oponente na Arena PET: {e}")
+                                    return False
                                 if wait_until_disappear(r"legend_bot\images\arena_PET\windowBar.png", timeout=60, confidence=0.8, region=TOP_BAR):
                                     if wait(r"legend_bot\images\arena_PET\inBatleIndicator.png", confidence=0.8, timeout=60, region=TOP_BAR):
                                         print("[ARENA PET] Entrou em batalha.")

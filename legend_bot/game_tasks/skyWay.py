@@ -1,12 +1,18 @@
 from core.daily_task import DailyTask
 
-from utils.general_use import open_map, by_map_go_to, move_mouse_outside_screen
-from utils.screenVision import exists, wait, find, list_all, check_right, wait_until_disappear
-from utils.actions import wait_time, click, click_position, hover_position
+from utils.general_use import open_map, by_map_go_to
+from utils.screenVision import exists, wait, find, list_all, wait_until_disappear
+from utils.actions import wait_time, click, hover_position
 from utils.regions import *
-from utils.OCR import extract_text_left_of_image, extract_text_from_position
+from utils.OCR import extract_text_from_position
 
 class SkyWay(DailyTask):
+    def __init__(self):
+        super().__init__()
+        self.blackout_hours = []
+        self.allowed_weekdays = [0, 1, 2, 3, 4, 5, 6]
+        self.priority = 6
+
     def _run_task(self):
         if open_map():
             if by_map_go_to("CaminhoCeu"):

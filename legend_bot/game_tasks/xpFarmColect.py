@@ -1,5 +1,5 @@
 from core.repeatable_task import RepeatableTask
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from utils.general_use import go_to_Interface
 from utils.screenVision import exists, wait, find, list_all
@@ -7,6 +7,13 @@ from utils.actions import wait_time, click, click_position
 from utils.regions import *
 
 class XPfarmColector(RepeatableTask):
+    def __init__(self):
+        super().__init__()
+        self.interval = timedelta(minutes=120)
+        self.blackout_hours = []
+        self.allowed_weekdays = [0, 1, 2, 3, 4, 5, 6]
+        self.priority = 9
+
     def _run_task(self):
         """
         Implementa a lógica para coletar XP farm

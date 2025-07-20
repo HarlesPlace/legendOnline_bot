@@ -4,8 +4,17 @@ from utils.general_use import go_to_Interface
 from utils.screenVision import exists, wait, find
 from utils.actions import wait_time, click
 from utils.regions import *
+from datetime import time
 
 class Fishing(FixedTimeTask):
+    def __init__(self):
+        super().__init__()
+        self.allowed_time_ranges = [
+            (time(12, 2), time(12, 25)),
+            (time(17, 32), time(17, 55))
+        ]
+        self.allowed_weekdays = [0,1,2,3,4,5,6]
+
     def _run_task(self):
         """
         Implementa a lógica para coletar XP farm

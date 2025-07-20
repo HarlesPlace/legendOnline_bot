@@ -2,14 +2,15 @@ from datetime import datetime, timedelta
 from core.base_task import BaseTask
 
 class RepeatableTask(BaseTask):
-    def __init__(self, interval_minutes=30, blackout_hours=None, allowed_weekdays=None):
+    def __init__(self):
         self.running = True
         self.last_time_executed = None
         self.error = False
         self.timesExecuted = 0
-        self.interval = timedelta(minutes=interval_minutes)
-        self.blackout_hours = blackout_hours or []
-        self.allowed_weekdays = allowed_weekdays
+        self.interval = timedelta(minutes=30)
+        self.blackout_hours = []
+        self.allowed_weekdays = []
+        self.priority = 9 # Ex: int de 0 a 9, sendo 0 a maior prioridade
 
     def _is_in_blackout(self):
         current_hour = datetime.now().hour
@@ -28,9 +29,15 @@ class RepeatableTask(BaseTask):
         return (datetime.now() - self.last_time_executed) >= self.interval
 
     def run(self):
-        self._run_task()
+        success = self._run_task()
         self.last_time_executed = datetime.now()
-    
+        if success:
+            self.timesExecuted += 1
+            return True
+        else:
+            self.error = True
+            return False
+
     def _run_task(self):
         """Sobrescreva esse método com a lógica real da tarefa."""
         raise NotImplementedError
