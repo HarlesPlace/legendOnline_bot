@@ -6,7 +6,7 @@ from utils.screenVision import exists, wait, find
 from utils.actions import wait_time, click, click_all
 from utils.regions import *
 
-class XPfarmColector(RepeatableTask):
+class PlantCrops(RepeatableTask):
     def _run_task(self):
         """
         Implementa a lógica para coletar XP farm

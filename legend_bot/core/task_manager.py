@@ -13,7 +13,7 @@ class TaskManager:
         self.lastTaskType = "Daily"
         self.max_retries = max_retries
 
-    def run_all(self):
+    def executeTasks(self):
         while not STOP:
             if not ERROR and not PAUSED:
                 runTask = self.determine_nextTask()
@@ -44,7 +44,6 @@ class TaskManager:
         fixed = self._get_runnable_task(self.fixedTasks)
         if fixed:
             return fixed
-
         # 2. Alternância entre tarefas diárias e contínuas
         if self.lastTaskType == "Daily":
             task = self._get_runnable_task(self.repeatableTasks)
@@ -56,7 +55,6 @@ class TaskManager:
             if task:
                 self.lastTaskType = "Daily"
                 return task
-
         # 3. Reexecutar tarefas com erro, se possível
         if self.errorTasks:
             task, retry_count = self.errorTasks.pop(0)
@@ -64,10 +62,8 @@ class TaskManager:
                 print(f"[TAREFA] Reexecutando após erro: {task.__class__.__name__} (tentativa {retry_count + 1})")
                 return task
             else:
-                print(f"[ERRO] {task.__class__.__name__} excedeu número máximo de tentativas.")
-        
+                print(f"[ERRO] {task.__class__.__name__} excedeu número máximo de tentativas.") 
         return None
-
     def _get_runnable_task(self, task_list):
         for task in task_list:
             if task.should_run():
