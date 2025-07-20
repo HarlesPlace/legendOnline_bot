@@ -27,7 +27,7 @@ def init_control():
     listener.start()
 
 def wait_if_paused_or_error():
-    while (PAUSED and not STOP and not ERROR):
+    while (PAUSED and (not STOP) and (not ERROR)):
         print("[BOT PAUSADO]")
         time.sleep(0.5)
     if STOP:
