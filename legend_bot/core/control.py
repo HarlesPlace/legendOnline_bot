@@ -37,10 +37,6 @@ def wait_if_paused_or_error():
 def happend_error():
     global ERROR
     ERROR = True
-    print(">> [ERRO] Ocorreu um erro. Pressione Ctrl+Alt+S para encerrar o bot.")
-    while not STOP:
-        time.sleep(1)
-    print(">> [ENCERRANDO BOT APÓS ERRO...]")
 
 def error_solved():
     global ERROR
