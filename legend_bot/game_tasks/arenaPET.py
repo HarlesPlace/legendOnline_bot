@@ -10,7 +10,7 @@ class ArenaPET(DailyTask):
         super().__init__()
         self.blackout_hours = []
         self.allowed_weekdays = [0, 1, 2, 3, 4, 5, 6]
-        self.priority = 5 
+        self.priority = 10
 
     def _run_task(self):
         if open_map():

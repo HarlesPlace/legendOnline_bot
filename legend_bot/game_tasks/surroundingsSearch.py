@@ -13,6 +13,10 @@ class SurroundingsSearch(DailyTask):
         self.allowed_weekdays = [0, 1, 2, 3, 4, 5, 6]
         self.priority = 5
 
+    def returnCastle(self):
+        click(r"legend_bot\images\surroundings_search\toCastleButton.png", region=BOTTOM_RIGHT, confidence=0.9)
+        wait_time(5)
+
     def _run_task(self):
         """
         Implementa a lógica para coletar nas escavações na redondeza.
@@ -40,28 +44,31 @@ class SurroundingsSearch(DailyTask):
                                                 count+=1
                                         else:
                                             print("[Escavação arredores] Botão de coleta não encontrado para pressionar")
+                                            self.returnCastle()
                                             return False
                                     else:
                                         print("[Escavação arredores] Escavação demorou além do ideal")
+                                        self.returnCastle()
                                         return False
-                                if click(r"legend_bot\images\surroundings_search\toCastleButton.png", region=BOTTOM_RIGHT, confidence=0.9):
-                                    wait_time(5)
-                                    return True
-                                else:
-                                    print("[Escavação arredores] Botão de retorno para castelo não encontrado")
-                                    return False
+                                self.returnCastle()
+                                return True
                             else:
                                 print("[Escavação arredores] Botão de exploração automática não detectado")
+                                self.returnCastle()
                                 return False
                         else:
                             print("[Escavação arredores] Interface de exploração não detectada")
+                            self.returnCastle()
                             return False
                     else:
                         print("[Escavação arredores] Não foi possível clicar no botão para começar a explorar")
+                        self.returnCastle()
                         return False
                 else:
                     print("[Escavação arredores] Esperava entrar nos arredores, mas não ocorreu")
+                    self.returnCastle()
                     return False
             else:
                 print("[Escavação arredores] Botão para arredores não encontrado")
+                self.returnCastle()
                 return False

@@ -36,6 +36,11 @@ class Fishing(FixedTimeTask):
                                     wait_time(3)
                                     click(r"legend_bot\images\fishing\confirmShipButton.png", confidence=0.8, region=FULL_SCREEN)
                                     wait_time(2)
+                                elif exists(r"legend_bot\images\fishing\ship2.png", confidence=0.9,region=FULL_SCREEN):
+                                    click(r"legend_bot\images\fishing\ship2.png", confidence=0.9,region=FULL_SCREEN)
+                                    wait_time(3)
+                                    click(r"legend_bot\images\fishing\confirmShipButton.png", confidence=0.8, region=FULL_SCREEN)
+                                    wait_time(2)
                                 else:
                                     click(r"legend_bot\images\fishing\cancelShipButton.png", confidence=0.8, region=FULL_SCREEN)
                                     wait_time(3)
