@@ -5,9 +5,9 @@ import time
 import threading
 from utils.highlight import highlight_area
 from PIL import ImageGrab
-from core.control import wait_if_paused_or_error
+from core.control import wait_if_paused_or_error, DEBUG
 
-def wait(image_path, timeout=10, confidence=0.8, debug=True, region=None):
+def wait(image_path, timeout=10, confidence=0.8, debug=DEBUG, region=None):
     """
     Espera até que uma imagem apareça na tela (ou região) ou até esgotar o tempo.
 
@@ -76,7 +76,7 @@ def wait(image_path, timeout=10, confidence=0.8, debug=True, region=None):
         time.sleep(1)
 
 
-def find(image_path, confidence=0.8, debug=False, region=None):
+def find(image_path, confidence=0.8, debug=DEBUG, region=None):
     """
     Procura uma imagem na tela ou em uma região especificada.
     
@@ -121,14 +121,14 @@ def find(image_path, confidence=0.8, debug=False, region=None):
 
     return None
 
-def exists(image_path, confidence=0.8, debug=False, region=None):
+def exists(image_path, confidence=0.8, debug=DEBUG, region=None):
     """
     Verifica se uma imagem está presente na tela.
     Retorna True se encontrada, False caso contrário.
     """
     return find(image_path, confidence=confidence, debug=debug, region=region) is not None
 
-def list_all(image_path, confidence=0.8, debug=False, min_distance=10):
+def list_all(image_path, confidence=0.8, debug=DEBUG, min_distance=10):
     """
     Encontra todas as ocorrências da imagem na tela.
     Retorna uma lista com as posições (x, y) centrais encontradas.
@@ -165,7 +165,7 @@ def list_all(image_path, confidence=0.8, debug=False, min_distance=10):
 
     return positions
 
-def find_all(image_path, confidence=0.8, debug=False, min_distance=10):
+def find_all(image_path, confidence=0.8, debug=DEBUG, min_distance=10):
     """
     Encontra todas as ocorrências da imagem na tela.
     Retorna uma lista com as regiões (x, y, w, h) encontradas.
@@ -231,7 +231,7 @@ def wait_until_disappear(image_path, timeout=15, confidence=0.9, region=None):
 
         time.sleep(1)
 
-def check_right(position, image_path, offset=(20, -20), region_size=(100, 40), confidence=0.8, debug=False):
+def check_right(position, image_path, offset=(20, -20), region_size=(100, 40), confidence=0.8, debug=DEBUG):
     """
     Para cada posição, verifica se a imagem está à direita e clica se encontrar.
 
@@ -265,7 +265,7 @@ def check_right(position, image_path, offset=(20, -20), region_size=(100, 40), c
         return None
 
 class RegionChangeObserver:
-    def __init__(self, region, threshold=1000, interval=0.5, debug=False):
+    def __init__(self, region, threshold=1000, interval=0.5, debug=DEBUG):
         """
         :param region: (x, y, w, h) da área a ser observada
         :param threshold: número mínimo de pixels diferentes para considerar mudança

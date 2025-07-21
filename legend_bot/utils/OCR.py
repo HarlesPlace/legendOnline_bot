@@ -6,6 +6,7 @@ import cv2, re
 import numpy as np
 from utils.highlight import highlight_area
 from utils.screenVision import find
+from core.control import DEBUG
 
 # Caminho para o executável do Tesseract (ajuste conforme seu sistema)
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe" 
@@ -79,7 +80,7 @@ def preprocess_for_ocr(img_cv, invert=False, upscale=2):
 
     return thresh
 
-def find_text(target_text, region=None, lang="por", invert=False, debug=False, color=(0, 0, 255)):
+def find_text(target_text, region=None, lang="por", invert=False, debug=DEBUG, color=(0, 0, 255)):
     """
     Procura um texto específico na tela e retorna a posição (x, y, w, h) da região.
 
@@ -127,7 +128,7 @@ def extract_text_right_of_image(
     width=100,
     lang="por",
     invert=False,
-    debug=False,
+    debug=DEBUG,
     confidence=0.8,
     only_numbers=False
 ):
@@ -180,7 +181,7 @@ def extract_text_left_of_image(
     width=100,
     lang="por",
     invert=False,
-    debug=False,
+    debug=DEBUG,
     confidence=0.8,
     only_numbers=False
 ):
@@ -237,7 +238,7 @@ def extract_text_from_position(
     offset=(100, 0, 150, 50),  # (dx, dy, largura, altura)
     lang="por",
     invert=False,
-    debug=False,
+    debug=DEBUG,
     only_numbers=False,
 ):
     """

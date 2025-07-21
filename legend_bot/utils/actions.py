@@ -1,12 +1,13 @@
 import pyautogui
 import time
 from utils.screenVision import wait, find, list_all
+from core.control import DEBUG
 
 def hover(image_path, confidence=0.8, region=None):
     """
     Move o mouse até o centro da imagem detectada na tela.
     """
-    position = find(image_path, confidence=confidence, debug=False, region=region)
+    position = find(image_path, confidence=confidence, debug=DEBUG, region=region)
     if position:
         pyautogui.moveTo(position[0]+position[2]/2, position[1]+position[3]/2, duration=0.3)
         print(f"[INFO] Mouse movido até {position}")
@@ -161,7 +162,7 @@ def wait_time(seconds):
         
         time.sleep(seconds)
 
-def click_all(image_path, confidence=0.8, delay_between=1, debug=True):
+def click_all(image_path, confidence=0.8, delay_between=1, debug=DEBUG):
     """
     Clica em todas as ocorrências de uma imagem na tela, com pequeno intervalo entre os cliques.
 

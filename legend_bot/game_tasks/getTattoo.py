@@ -26,7 +26,7 @@ class GetTattoo(RepeatableTask):
             if (wait("legend_bot\images\get_tattoo\windownBar.png", timeout=60, confidence=0.8, region=TOP_BAR) and self.running):
                 move_mouse_outside_screen()
                 if exists("legend_bot\images\get_tattoo\colectTattoo.png", confidence=0.8, region=FULL_SCREEN):
-                    click_all("legend_bot\images\get_tattoo\colectTattoo.png", confidence=0.8, delay_between=3, debug=False)
+                    click_all("legend_bot\images\get_tattoo\colectTattoo.png", confidence=0.8, delay_between=3)
                 wait_time(5)
                 click("legend_bot\images\get_tattoo\getTattooExitButton.png", confidence=0.9, region=TOP_RIGHT)
                 wait_time(4)

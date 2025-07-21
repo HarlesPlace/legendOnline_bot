@@ -17,7 +17,7 @@ class SkyWay(DailyTask):
         if open_map():
             if by_map_go_to("CaminhoCeu"):
                 if wait(r"legend_bot\images\sky_way\interfaceIndicator.png", confidence=0.8, timeout=30, region=FULL_SCREEN):
-                    arenaPET_region = find(r"legend_bot\images\sky_way\interfaceIndicator.png", confidence=0.8,region=FULL_SCREEN, debug=False)
+                    arenaPET_region = find(r"legend_bot\images\sky_way\interfaceIndicator.png", confidence=0.8,region=FULL_SCREEN)
                     click(r"legend_bot\images\sky_way\skyWayButton.png", region=arenaPET_region, confidence=0.8)
                     if wait(r"legend_bot\images\sky_way\windowIndicator.png", confidence=0.8, timeout=30, region=TOP_BAR):
                         results_position=list_all(r"legend_bot\images\sky_way\chest.png", confidence=0.89)

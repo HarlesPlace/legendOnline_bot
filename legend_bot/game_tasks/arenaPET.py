@@ -16,7 +16,7 @@ class ArenaPET(DailyTask):
         if open_map():
             if by_map_go_to("ArenaPET"):
                 if wait(r"legend_bot\images\arena_PET\interfaceIndicator.png", confidence=0.8, timeout=30, region=FULL_SCREEN):
-                    arenaPET_region = find(r"legend_bot\images\arena_PET\interfaceIndicator.png", confidence=0.8,region=FULL_SCREEN, debug=False)
+                    arenaPET_region = find(r"legend_bot\images\arena_PET\interfaceIndicator.png", confidence=0.8,region=FULL_SCREEN)
                     click(r"legend_bot\images\arena_PET\arenaPETbutton.png", region=arenaPET_region, confidence=0.8)
                     if wait(r"legend_bot\images\arena_PET\windowBar.png", confidence=0.8, timeout=30, region=TOP_BAR):
                         mypower=int(extract_text_right_of_image(r"legend_bot\images\arena_PET\myPowerIndicator.png",confidence=0.8, width=140, invert=True, only_numbers=True))
@@ -37,7 +37,7 @@ class ArenaPET(DailyTask):
                                     print(f"[ARENA PET] Poder do inimigo {k} não reconhecido. Assumindo valor alto.")
                                 position = check_right(position=allOpponentsLocations[k],
                                                        image_path= r"legend_bot\images\arena_PET\chalengeButton.png", 
-                                                       offset=(20, -70), region_size=(200, 100), confidence=0.8, debug=True)
+                                                       offset=(20, -70), region_size=(200, 100), confidence=0.8)
                                 chalengeButtonLocations.append(position)
                             print(f"[ARENA PET] Poder dos oponentes: {enemyPower}")
                             print(f"[ARENA PET] Botões de desafio encontrados: {chalengeButtonLocations}")

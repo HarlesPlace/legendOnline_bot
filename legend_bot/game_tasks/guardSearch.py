@@ -21,7 +21,7 @@ class GuardSearch(DailyTask):
         if open_map():
             if by_map_go_to("GuardiaoCeleste"):
                 if wait(r"legend_bot\images\guard_search\interfaceIndicator.png", confidence=0.8, timeout=60, region=FULL_SCREEN):
-                    searchGuard_region = find(r"legend_bot\images\guard_search\interfaceIndicator.png", confidence=0.8,region=FULL_SCREEN, debug=False)
+                    searchGuard_region = find(r"legend_bot\images\guard_search\interfaceIndicator.png", confidence=0.8,region=FULL_SCREEN)
                     click(r"legend_bot\images\guard_search\guardSearchButton.png", region=searchGuard_region, confidence=0.8)
                     if wait(r"legend_bot\images\guard_search\mainWindowBar.png", confidence=0.8, timeout=30, region=TOP_BAR):
                         battles = list_all(r"legend_bot\images\guard_search\battleIndicator.png", confidence=0.8)
