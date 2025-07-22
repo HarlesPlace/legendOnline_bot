@@ -33,7 +33,7 @@ class PlantCrops(RepeatableTask):
                             click(r"legend_bot\images\plant_crops\returnHomeButton.png", confidence=0.9, region=BOTTOM_RIGHT) 
                             wait_time(3)
                         if exists(r"legend_bot\images\plant_crops\colectCropIndicator.png", confidence=0.8, region=BOTTOM_RIGHT) and self.running:
-                            click(r"legend_bot\images\plant_crops\colectCropIndicator.png", confidence=0.8, region=BOTTOM_RIGHT)
+                            click(r"legend_bot\images\plant_crops\colectButton.png", confidence=0.8, region=BOTTOM_RIGHT)
                             wait_time(5)
                         if exists(r"legend_bot\images\plant_crops\optionsMenu.png", confidence=0.8, region=BOTTOM_LEFT) and self.running:
                             option_region=find(r"legend_bot\images\plant_crops\optionsMenu.png", confidence=0.8, region=BOTTOM_LEFT)

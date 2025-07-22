@@ -49,9 +49,8 @@ class Navigation(RepeatableTask):
                                             if possibleGain>=2:
                                                 if click(r"legend_bot\images\navigation\exchangeConfirmerButton.png", region=menu_location, confidence=0.8):
                                                     if wait(r"legend_bot\images\navigation\shipWindowBar.png", confidence=0.8, region=TOP_BAR):
-                                                        try:
-                                                            ship = click(r"legend_bot\images\navigation\ship.png", confidence=0.92, region=FULL_SCREEN)
-                                                        except:
+                                                        ship = click(r"legend_bot\images\navigation\ship.png", confidence=0.92, region=FULL_SCREEN)
+                                                        if not ship:
                                                             ship = click(r"legend_bot\images\navigation\ship2.png", confidence=0.92, region=FULL_SCREEN)
                                                         if ship:
                                                             wait_time(1)

@@ -207,3 +207,28 @@ def click_position(position):
     pyautogui.moveTo(x, y)
     pyautogui.click()
     return True
+
+@wait_until_all_ok
+def click_with_offset(image_path, offset=(0, 0), confidence=0.8, region=None, debug=DEBUG):
+    """
+    Clica em uma posição com offset relativo ao centro da imagem detectada.
+
+    - image_path: caminho da imagem a ser localizada.
+    - offset: tupla (x, y) com o deslocamento em pixels a partir do centro.
+    - confidence: precisão da correspondência da imagem.
+    - region: região da tela onde procurar.
+    - debug: exibe informações adicionais se True.
+    """
+    position = find(image_path, confidence=confidence, region=region, debug=debug)
+    if position:
+        x_center = position[0] + position[2] / 2
+        y_center = position[1] + position[3] / 2
+        final_x = x_center + offset[0]
+        final_y = y_center + offset[1]
+        click_position((final_x, final_y))
+        if debug:
+            print(f"[INFO] Clique com offset em ({final_x}, {final_y}) relativo a {image_path}")
+        return True
+    else:
+        print(f"[ERRO] Imagem '{image_path}' não encontrada para clique com offset.")
+        return False

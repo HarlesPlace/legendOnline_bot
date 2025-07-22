@@ -1,5 +1,5 @@
 from utils.screenVision import exists, wait, find, wait_until_disappear
-from utils.actions import click, wait_time, click_position
+from utils.actions import click, wait_time, click_position, click_with_offset
 from utils.regions import *
 from utils.mapsCoords import MAP_LOCATIONS
 import pyautogui
@@ -108,10 +108,15 @@ def find_in_eventBar(image_path, confidence=0.9):
         click(r"legend_bot\images\find_in_eventBar\eventsUncolapserButton.png",confidence=0.8, region=TOP_BAR)
         wait_time(5)
     move_mouse_outside_screen()
-    if (not exists(image_path, confidence=confidence,  region=TOP_BAR)) and exists(r"legend_bot\images\find_in_eventBar\nextButton.png", confidence=0.9,  region=TOP_BAR):
-        click(r"legend_bot\images\find_in_eventBar\nextButton.png", confidence=confidence, region=TOP_BAR)
-    elif ((not exists(image_path, confidence=confidence,  region=TOP_BAR)) and exists(r"legend_bot\images\find_in_eventBar\previewButton.png", confidence=0.9,  region=TOP_BAR)):
-        click(r"legend_bot\images\find_in_eventBar\previewButton.png", confidence=confidence, region=TOP_BAR)
+    wait_time(6)
+    if (not exists(image_path, confidence=confidence,  region=TOP_BAR)):
+        print("Next Button")
+        click_with_offset(r"legend_bot\images\find_in_eventBar\eventsColapserButton.png", confidence=confidence, region=TOP_BAR, offset=(45,0))
+        wait_time(1)
+    if not exists(image_path, confidence=confidence,  region=TOP_BAR):
+        print("Preview Button")
+        click_with_offset(r"legend_bot\images\find_in_eventBar\eventsColapserButton.png", confidence=confidence, region=TOP_BAR, offset=(-45,0))
+        wait_time(1)
     move_mouse_outside_screen()
     wait_time(6)
     if exists(image_path, confidence=confidence,  region=TOP_BAR):
