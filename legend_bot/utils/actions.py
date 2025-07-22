@@ -1,19 +1,21 @@
 import pyautogui
 import time
-from utils.screenVision import wait, find, list_all
-from core.control import DEBUG
+from utils.screenVision import wait, find, list_all, master_find
+from core.control import DEBUG, ERROR, PAUSED, STOP, wait_until_all_ok
 
-def hover(image_path, confidence=0.8, region=None):
+def master_hover(image_path, confidence=0.8, region=None):
     """
     Move o mouse até o centro da imagem detectada na tela.
     """
-    position = find(image_path, confidence=confidence, debug=DEBUG, region=region)
+    position = master_find(image_path, confidence=confidence, debug=DEBUG, region=region)
     if position:
         pyautogui.moveTo(position[0]+position[2]/2, position[1]+position[3]/2, duration=0.3)
         print(f"[INFO] Mouse movido até {position}")
         return True
     print("[ERRO] Imagem não encontrada para hover.")
     return False
+
+hover = wait_until_all_ok(master_hover)
 
 def hover_position(position, duration=0.3):
     """
@@ -31,18 +33,21 @@ def hover_position(position, duration=0.3):
     else:
         print("[ERRO] Posição inválida fornecida para hover.")
         return False
-    
-def click(image_path, confidence=0.8, region=None):
+
+def master_click(image_path, confidence=0.8, region=None):
     """
     Clica no centro da imagem detectada na tela.
     """
-    if hover(image_path, confidence=confidence, region=region):
+    if master_hover(image_path, confidence=confidence, region=region):
         pyautogui.click()
         print("[INFO] Clique executado.")
         return True
     print("[ERRO] Não foi possível clicar (imagem não encontrada).")
     return False
 
+click=wait_until_all_ok(master_click)
+
+@wait_until_all_ok
 def type_text(text, BeforeImage_path = None, AfterImage_path=None, confidence=0.8, press_enter=False, clear_first=False):
     """
     Digita o texto fornecido. Se image_path for dado, clica na área antes de digitar.
@@ -80,6 +85,7 @@ def type_text(text, BeforeImage_path = None, AfterImage_path=None, confidence=0.
     print(f"[INFO] Texto digitado: '{text}'")
     return True
 
+@wait_until_all_ok
 def scroll(direction='down', amount=1, step=100, position=None, delay=0.1):
     """
     Rola a tela na direção especificada.
@@ -110,6 +116,7 @@ def scroll(direction='down', amount=1, step=100, position=None, delay=0.1):
     print(f"[INFO] Scroll {direction} realizado {amount}x (step={step})")
     return True
 
+@wait_until_all_ok
 def drag(from_image, to_image, timeout=10, confidence=0.8):
     """
     Arrasta o mouse do centro de from_image até o centro de to_image.
@@ -138,7 +145,7 @@ def drag(from_image, to_image, timeout=10, confidence=0.8):
     print(f"[INFO] Arrasto realizado de {start_pos} até {end_pos}")
     return True
 
-def wait_time(seconds):
+def master_wait_time(seconds):
     """
     Espera um número específico de segundos.
     
@@ -159,9 +166,11 @@ def wait_time(seconds):
         if elapsed > seconds:
             print("[AVISO] Tempo de espera cumprido.")
             return None
-        
         time.sleep(seconds)
 
+wait_time = wait_until_all_ok(master_wait_time)
+
+@wait_until_all_ok
 def click_all(image_path, confidence=0.8, delay_between=1, debug=DEBUG):
     """
     Clica em todas as ocorrências de uma imagem na tela, com pequeno intervalo entre os cliques.
@@ -180,6 +189,7 @@ def click_all(image_path, confidence=0.8, delay_between=1, debug=DEBUG):
     if debug:
         print(f"[INFO] {len(positions)} clique(s) realizados.")
 
+@wait_until_all_ok
 def click_position(position):
     """
     Clica em uma posição fornecida.

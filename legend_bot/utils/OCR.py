@@ -6,11 +6,12 @@ import cv2, re
 import numpy as np
 from utils.highlight import highlight_area
 from utils.screenVision import find
-from core.control import DEBUG
+from core.control import DEBUG, wait_until_all_ok
 
 # Caminho para o executável do Tesseract (ajuste conforme seu sistema)
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe" 
 
+@wait_until_all_ok
 def read_text_from_screen(region=None, lang="por", invert=False):
     """
     Captura texto da tela usando OCR.
@@ -30,6 +31,7 @@ def read_text_from_screen(region=None, lang="por", invert=False):
     text = pytesseract.image_to_string(screenshot, lang=lang)
     return text.strip()
 
+@wait_until_all_ok
 def wait_for_text(target_text, region=None, lang="por", timeout=15, invert=False):
     """
     Espera até que um texto apareça na tela.
@@ -80,6 +82,7 @@ def preprocess_for_ocr(img_cv, invert=False, upscale=2):
 
     return thresh
 
+@wait_until_all_ok
 def find_text(target_text, region=None, lang="por", invert=False, debug=DEBUG, color=(0, 0, 255)):
     """
     Procura um texto específico na tela e retorna a posição (x, y, w, h) da região.
@@ -123,6 +126,7 @@ def find_text(target_text, region=None, lang="por", invert=False, debug=DEBUG, c
 
     return None
 
+@wait_until_all_ok
 def extract_text_right_of_image(
     image_path,
     width=100,
@@ -176,6 +180,7 @@ def extract_text_right_of_image(
 
     return text if text else None
 
+@wait_until_all_ok
 def extract_text_left_of_image(
     image_path,
     width=100,
@@ -233,6 +238,7 @@ def extract_text_left_of_image(
 
     return text if text else None
 
+@wait_until_all_ok
 def extract_text_from_position(
     position,
     offset=(100, 0, 150, 50),  # (dx, dy, largura, altura)

@@ -1,11 +1,28 @@
 import keyboard
 import threading
 import time
+from functools import wraps
 
 PAUSED = False
 STOP = False
 ERROR = False
 DEBUG = False
+
+def all_Ok():
+    return (not PAUSED and not ERROR and not STOP)
+
+def wait_until_all_ok(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        while not all_Ok():
+            #if PAUSED:
+            #    print("[BOT PAUSADO]")
+            #if ERROR:
+            #    print("[BOT EM ERRO]")
+            time.sleep(0.5)
+
+        return func(*args, **kwargs)
+    return wrapper
 
 def pause_or_continue():
     global PAUSED
@@ -28,13 +45,19 @@ def init_control():
     listener.start()
 
 def wait_if_paused_or_error():
-    while (PAUSED and (not STOP) and (not ERROR)):
-        print("[BOT PAUSADO]")
+    while (PAUSED or ERROR) and not STOP:
+        #if PAUSED and ERROR:
+        #    print("[BOT PAUSADO E COM ERRO]")
+        #elif ERROR:
+        #    print("[BOT COM ERRO]")
+        #elif PAUSED:
+        #    print("[BOT PAUSADO]")
         time.sleep(0.5)
     if STOP:
         raise KeyboardInterrupt("Execução encerrada.")
     
 def happend_error():
+    print(">> [Aconteceu um erro]")
     global ERROR
     ERROR = True
 
