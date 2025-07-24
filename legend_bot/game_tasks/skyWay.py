@@ -23,23 +23,30 @@ class SkyWay(DailyTask):
                         results_position=list_all(r"legend_bot\images\sky_way\chest.png", confidence=0.89)
                         engine=True
                         i=0
+                        if exists(r"legend_bot\images\sky_way\skyWayTotalyCompletedIndicator.png", confidence=0.95, region= TOP_LEFT):
+                            totalyCompleted=True
+                        else:
+                            totalyCompleted=False
                         while engine and (i<len(results_position))and self.running:
                             hover_position(results_position[i])
                             wait_time(3)
-                            if exists(r"legend_bot\images\sky_way\greyChalengeButton.png",confidence=0.9, region=FULL_SCREEN):
+                            if exists(r"legend_bot\images\sky_way\greyChalengeButton.png",confidence=0.9, region=FULL_SCREEN) or totalyCompleted:
                                 engine=False
                                 click(r"legend_bot\images\sky_way\searchButton.png", region=FULL_SCREEN, confidence=0.9)
                                 if wait(r"legend_bot\images\sky_way\inWayIndicator.png", confidence=0.8, timeout=30, region=BOTTOM_RIGHT):
                                     while self.running:
-                                        conclusionPercentage=extract_text_from_position(position=find(r"legend_bot\images\sky_way\inWayIndicator.png", confidence=0.8, region=BOTTOM_RIGHT),
+                                        try:
+                                            conclusionPercentage=extract_text_from_position(position=find(r"legend_bot\images\sky_way\inWayIndicator.png", confidence=0.8, region=BOTTOM_RIGHT),
                                                                                         offset=(-425, 25, 100, 50),invert=True, debug=True, only_numbers=True)
+                                        except:
+                                            conclusionPercentage = None
                                         print(f"[SKY WAY] Progresso do Caminho do Céu: {conclusionPercentage}%")
                                         if conclusionPercentage is None:
                                             print("[SKY WAY] Não foi possível extrair o progresso do Caminho do Céu. Assumindo ZERO.")
                                             conclusionPercentage = 0
                                         else:
                                             conclusionPercentage = int(conclusionPercentage)
-                                        if conclusionPercentage>=95:
+                                        if conclusionPercentage>=95 and not totalyCompleted:
                                             print("[SKY WAY] Chegou a 95% de conclusão, encerrando este Caminho")
                                             break
                                         else:
@@ -54,8 +61,13 @@ class SkyWay(DailyTask):
                                         if exists(r"legend_bot\images\sky_way\skyWayCloseButton.png", confidence=0.8, region=FULL_SCREEN):
                                             click(r"legend_bot\images\sky_way\skyWayCloseButton.png", region=FULL_SCREEN, confidence=0.8)
                                             print("[SKY WAY] Janela fechada.")
-                                    if not exists(r"legend_bot\images\sky_way\manaPoolEmpty.png", confidence=0.98, region=BOTTOM_BAR):
-                                        engine=False
+                                        if not exists(r"legend_bot\images\sky_way\manaPoolEmpty.png", confidence=0.98, region=BOTTOM_BAR):
+                                            print("não existe manaPool vazia")
+                                            engine=True
+                                        else:
+                                            print("existe manaPool vazia")
+                                            engine=False
+                                            break
                                     click(r"legend_bot\images\sky_way\returnButton.png", region=buttonPlace, confidence=0.8)
                                     wait_time(2)
                             else:

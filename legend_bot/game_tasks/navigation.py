@@ -10,7 +10,7 @@ from datetime import timedelta
 class Navigation(RepeatableTask):
     def __init__(self):
         super().__init__()
-        self.interval = timedelta(minutes=60)
+        self.interval = timedelta(minutes=80)
         self.blackout_hours = []
         self.allowed_weekdays = [0, 1, 2, 3, 4, 5, 6]
         self.priority = 7
@@ -33,7 +33,7 @@ class Navigation(RepeatableTask):
                                 port_location=find(r"legend_bot\images\navigation\portWindowBar.png",confidence=0.8, region=TOP_BAR)
                                 if click(r"legend_bot\images\navigation\exchangeButton.png", confidence=0.8, region=port_location):
                                     if wait(r"legend_bot\images\navigation\materialSelection.png", confidence=0.8, timeout=10):
-                                        if exists(r"legend_bot\images\navigation\menu.png", confidence=0.9, region=BOTTOM_BAR):
+                                        if exists(r"legend_bot\images\navigation\menu.png", confidence=0.95, region=BOTTOM_BAR):
                                             menu_location=find(r"legend_bot\images\navigation\menu.png", confidence=0.9, region=BOTTOM_BAR)
                                             options = find_all(r"legend_bot\images\navigation\materialSelection.png", confidence=0.8)
                                             for option in options:
@@ -79,8 +79,10 @@ class Navigation(RepeatableTask):
                                                             click(r"legend_bot\images\navigation\portExitButton.png", confidence=0.9, region=port_location)
                                                             wait_time(2)
 
-                                        elif exists(r"legend_bot\images\navigation\cantNavigateNowIndicator.png", confidence=0.9, region=BOTTOM_BAR):
+                                        elif exists(r"legend_bot\images\navigation\cantNavigateNowIndicator.png", confidence=0.93, region=BOTTOM_BAR):
                                             print("[Navegação] Porto indisponivel no momento")
+                                            click(r"legend_bot\images\navigation\portExitButton.png", confidence=0.9, region=port_location)
+                                            wait_time(2)
                                         else:
                                             print("[Navegação] Deu ruim irmão, não sei oq rolou")
                                             return False
