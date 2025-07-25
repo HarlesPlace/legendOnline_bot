@@ -14,13 +14,14 @@ from game_tasks.skyWay import SkyWay
 from game_tasks.surroundingsSearch import SurroundingsSearch
 from game_tasks.xpFarmColect import XPfarmColector
 from game_tasks.mainJudgment import MainJudgment
+from game_tasks.labirinth import Labirinth
 
 continuosTasks_list = [CollectOnlinePacket(), CollectSummer(), DemonCountry(), GetTattoo(),
                        Navigation(), PlantCrops(),
                        XPfarmColector()]
-fixedTimeTasks_list = []
+fixedTimeTasks_list = [Fishing()]
 dailyTimeTasks_list = [ArenaPET(), GuardSearch(), SkyWay(),
-                       SurroundingsSearch(), MainJudgment()]
+                       SurroundingsSearch(), MainJudgment(), Labirinth()]
 
 def main():
     init_control()

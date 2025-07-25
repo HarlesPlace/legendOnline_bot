@@ -23,13 +23,8 @@ class Labirinth(DailyTask):
             labirinths=[r"legend_bot\images\labirinth\lab1Button.png",
                         r"legend_bot\images\labirinth\lab2Button.png",
                         r"legend_bot\images\labirinth\lab3Button.png"]
-            lab1=False
-            lab2=False
-            lab3=False
-            DONE=False
-            i=1
             for lab in labirinths:
-                for i in range(2):
+                for i in range(3):
                     if not exists(r"legend_bot\images\labirinth\window.png", region=TOP_BAR, confidence=0.8):
                         try:
                             click_position(castle_button_place)
@@ -58,9 +53,12 @@ class Labirinth(DailyTask):
                                         click(r"legend_bot\images\labirinth\initLab.png", region =lab_menu_region, confidence=0.9)
                             elif continueBotIndicator:
                                 click(r"legend_bot\images\labirinth\continueBOTbutton.png", region=lab_menu_region, confidence=0.9)
-                            
-                            if wait(r"legend_bot\images\labirinth\botWindowBar.png", region=TOP_BAR, confidence=0.8, timeout=30):
-                                bot_bar_region=find(r"legend_bot\images\labirinth\botWindowBar.png", region=TOP_BAR, confidence=0.8, timeout=30)
+                                wait_time(2)
+                                print("/////////////////////////////////")
+                            aaa=exists(r"legend_bot\images\labirinth\botWindowBar.png", region=FULL_SCREEN, confidence=0.7)
+                            print(f"Bot window exists: {aaa}")
+                            if wait(r"legend_bot\images\labirinth\botWindowBar.png", region=FULL_SCREEN, confidence=0.7, timeout=30):
+                                bot_bar_region=find(r"legend_bot\images\labirinth\botWindowBar.png", region=FULL_SCREEN, confidence=0.8)
                                 click(r"legend_bot\images\labirinth\initBOTbutton.png", region=RIGHT_SIDE, confidence=0.8)
                                 wait_time(5)
                                 print("aaaaaaaaaaaaaaaaaaaaaaaaa")
@@ -70,7 +68,9 @@ class Labirinth(DailyTask):
                                     if wait(r"legend_bot\images\labirinth\botConcludedIndicator.png", region=BOTTOM_LEFT, confidence=0.8,timeout=200):
                                         click(r"legend_bot\images\labirinth\botConcludeButton.png", region=menu_region, confidence=0.8)
                                         wait_time(2)
-                        elif exists(r"legend_bot\images\labirinth\lastStepIndicator.png", confidence=0.8, region=lab_menu_region):
+                            else:
+                                print("bbbbbbbbbbbbbbbbbbbbbbbb")
+                        elif exists(r"legend_bot\images\labirinth\lastStepIndicator.png", confidence=0.9, region=lab_menu_region):
                             if click(r"legend_bot\images\labirinth\doLastStepButton.png", region=lab_menu_region, confidence=0.9):
                                 if wait(r"legend_bot\images\labirinth\inLastStepIndicator.png", region=TOP_LEFT, confidence=0.85, timeout=160):
                                     if exists(r"legend_bot\images\labirinth\autoFightButton.png", region=TOP_LEFT, confidence=0.85):
@@ -78,9 +78,16 @@ class Labirinth(DailyTask):
                                         if wait(r"legend_bot\images\labirinth\inCombatIndicator.png", region=TOP_RIGHT, confidence=0.8, timeout=120):
                                             if wait_until_disappear(r"legend_bot\images\labirinth\inCombatIndicator.png", region=TOP_RIGHT, confidence=0.8, timeout=150):
                                                 if wait(r"legend_bot\images\labirinth\gainsWindowBar.png", region=TOP_BAR, confidence=0.8, timeout=120):
+                                                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                                                     gains_region=find(r"legend_bot\images\labirinth\gainsWindowBar.png", region=TOP_BAR, confidence=0.8)
-                                                    click(r"legend_bot\images\labirinth\exitGainButton.png", region=gains_region, confidence=0.8)
+                                                    click(r"legend_bot\images\labirinth\exitGainButton.png", region=TOP_BAR, confidence=0.8)
                                                     wait_time(3)
+                                                else:
+                                                    print("??????????????????????????????")
+            if exists(r"legend_bot\images\labirinth\window.png", region=TOP_BAR, confidence=0.8):
+                windowBar_region=find(r"legend_bot\images\labirinth\window.png", region=TOP_BAR, confidence=0.8)
+                click(r"legend_bot\images\labirinth\exitLabButton.png", region=windowBar_region, confidence=0.8)
+            return True
 
                                      
 
