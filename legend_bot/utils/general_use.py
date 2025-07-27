@@ -124,6 +124,21 @@ def find_in_eventBar(image_path, confidence=0.9):
     else:
         return False
 
+def by_chest_of_time(image_path, confidence=0.8):
+    """
+    Abre o baú do tempo.
+    """
+    if find_in_eventBar(r"legend_bot\images\by_chest_of_time\time_chest.png", confidence=confidence):
+        click(r"legend_bot\images\by_chest_of_time\time_chest.png", confidence=confidence, region=TOP_BAR)
+        wait_time(3)
+        if exists(image_path, confidence=confidence,  region=TOP_BAR):
+            click(image_path, confidence=confidence, region=TOP_BAR)
+        else:
+            return False
+    else: 
+        return False
+    return True
+            
 def open_map():
     """
     Abre o mapa do jogo.
