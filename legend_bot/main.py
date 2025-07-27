@@ -16,11 +16,12 @@ from game_tasks.xpFarmColect import XPfarmColector
 from game_tasks.mainJudgment import MainJudgment
 from game_tasks.labirinth import Labirinth
 from game_tasks.guildTreasure import GuildTreasure
+from game_tasks.arena import Arena
 
 continuosTasks_list = [CollectOnlinePacket(), CollectSummer(), DemonCountry(), GetTattoo(),
                        Navigation(), PlantCrops(), GuildTreasure(),
                        XPfarmColector()]
-fixedTimeTasks_list = [Fishing()]
+fixedTimeTasks_list = [Fishing(), Arena()]
 dailyTimeTasks_list = [ArenaPET(), GuardSearch(), SkyWay(),
                        SurroundingsSearch(), MainJudgment(), Labirinth()]
 

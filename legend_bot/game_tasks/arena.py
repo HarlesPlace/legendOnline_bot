@@ -45,6 +45,7 @@ class Arena(FixedTimeTask):
                                                 count=0
                                                 while count<15 and self.running:
                                                     if click(r"legend_bot\images\arena\battleButton.png", region=inRoom_region, confidence=0.7):
+                                                        count+=1
                                                         wait_time(2)
                                                         if exists(r"legend_bot\images\arena\arenaCompletedIndicator.png", region=FULL_SCREEN, confidence=0.8):
                                                             outOfTimes_region=find(r"legend_bot\images\arena\arenaCompletedIndicator.png", region=FULL_SCREEN, confidence=0.8)
@@ -60,4 +61,10 @@ class Arena(FixedTimeTask):
                                                             if wait(r"legend_bot\images\arena\inBattleIndicator.png", region=TOP_BAR, confidence=0.88,timeout=60):
                                                                 if exists(r"legend_bot\images\arena\autoFightButton.png", confidence=0.91, region=BOTTOM_RIGHT):
                                                                     click(r"legend_bot\images\arena\autoFightButton.png", confidence=0.91, region=BOTTOM_RIGHT)
-                                                                wait(r"legend_bot\images\arena\inRoomIndicator.png",region=inRoom_region, confidence=0.7, timeout=240)
+                                                            if wait(r"legend_bot\images\arena\inRoomIndicator.png",region=inRoom_region, confidence=0.7, timeout=240):
+                                                                print("Voltou a sala de batalha")
+                                        click(r"legend_bot\images\arena\exitArenaButton.png", region=BOTTOM_RIGHT, confidence=0.83)
+                                        wait_time(5)
+                                if exists(r"legend_bot\images\arena\arenaWindowBar.png", region=TOP_BAR, confidence=0.8):       
+                                    click(r"legend_bot\images\arena\exitCreatRoomButton.png", region=windowBar, confidence=0.8)                                
+        return True

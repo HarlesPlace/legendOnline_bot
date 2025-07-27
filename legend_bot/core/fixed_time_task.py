@@ -20,7 +20,7 @@ class FixedTimeTask(BaseTask):
         return datetime.now().weekday() in self.allowed_weekdays
 
     def should_run(self) -> bool:
-        return self._is_time_allowed() and self._is_weekday_allowed()
+        return self._is_time_allowed() and self._is_weekday_allowed() and not self.done
 
     def run(self):
         success = self._run_task()
