@@ -20,7 +20,7 @@ from game_tasks.arena import Arena
 from game_tasks.assassinationOfMidnight import AssassinationOfMidnight
 
 continuosTasks_list = [CollectOnlinePacket(), CollectSummer(), DemonCountry(), GetTattoo(),
-                       Navigation(), PlantCrops(), GuildTreasure(),
+                       Navigation(), PlantCrops(),
                        XPfarmColector()]
 fixedTimeTasks_list = [Fishing(), Arena(), AssassinationOfMidnight()]
 dailyTimeTasks_list = [ArenaPET(), GuardSearch(), SkyWay(),
@@ -29,8 +29,7 @@ dailyTimeTasks_list = [ArenaPET(), GuardSearch(), SkyWay(),
 def main():
     init_control()
     init_errorMonitor()
-    bot = TaskManager(dailyTimeTasks_list, fixedTimeTasks_list,
-                      continuosTasks_list, max_retries=4)
+    bot = TaskManager(dailyTimeTasks_list, fixedTimeTasks_list, continuosTasks_list)
     bot.executeTasks()
 
 if __name__ == "__main__":

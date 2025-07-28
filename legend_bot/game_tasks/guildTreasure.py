@@ -9,7 +9,7 @@ from utils.regions import *
 class GuildTreasure(RepeatableTask):
     def __init__(self):
         super().__init__()
-        self.interval = timedelta(minutes=120)
+        self.interval = timedelta(minutes=70)
         self.blackout_hours = []
         self.allowed_weekdays = [0, 1, 2, 3, 4, 5, 6]
         self.priority = 3

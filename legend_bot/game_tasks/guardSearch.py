@@ -59,9 +59,7 @@ class GuardSearch(DailyTask):
                                 wait_time(3)
 
                         region=find(r"legend_bot\images\guard_search\mainWindowBar.png", confidence=0.8, region=TOP_BAR)
-                        print("aaaaaaaaaaaaaaaaaa")
                         click(r"legend_bot\images\guard_search\searchGuardExitButton.png", region=region, confidence=0.8)
-                        print("bbbbbbbbbbbbbbbbb")
                         wait_time(3)
                         return True
                     else:

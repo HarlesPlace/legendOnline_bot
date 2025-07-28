@@ -29,11 +29,11 @@ class CollectOnlinePacket(RepeatableTask):
                     click(r"legend_bot\images\online_packet_getter\colectButton.png", confidence=0.98, region=CENTER)
                     wait_time(3)
                 windowbarRegion = find(r"legend_bot\images\online_packet_getter\windowBar.png", confidence=0.85, region=TOP_BAR)
-                click(r"legend_bot\images\online_packet_getter\packetOnlineExitButton.png", region=windowbarRegion, confidence=0.8)
-                return True
+                click(r"legend_bot\images\online_packet_getter\packetOnlineExitButton.png", region=windowbarRegion, confidence=0.8)    
             else: 
                 print("[Pacote online] Janela não detectada")
                 return False
         else:
             print("[Pacote online] Não detectado botão para a interface")
-            return False
+            
+        return True

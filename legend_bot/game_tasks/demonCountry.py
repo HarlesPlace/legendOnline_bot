@@ -9,7 +9,7 @@ from datetime import timedelta
 class DemonCountry(RepeatableTask):
     def __init__(self):
         super().__init__()
-        self.interval = timedelta(minutes=30)
+        self.interval = timedelta(minutes=120)
         self.blackout_hours = []
         self.allowed_weekdays = [0, 1, 2, 3, 4, 5, 6]
         self.priority = 5 

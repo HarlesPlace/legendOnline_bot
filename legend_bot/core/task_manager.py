@@ -68,6 +68,7 @@ class TaskManager:
         if self.errorTasks:
             task, retry_count = self.errorTasks.pop(0)
             if retry_count < self.max_retries:
+                self.errorTasks.append((task, retry_count))
                 print(f"[TAREFA] Reexecutando após erro: {task.__class__.__name__} (tentativa {retry_count + 1})")
                 return task
             else:
