@@ -18,13 +18,27 @@ from game_tasks.labirinth import Labirinth
 from game_tasks.guildTreasure import GuildTreasure
 from game_tasks.arena import Arena
 from game_tasks.assassinationOfMidnight import AssassinationOfMidnight
+from game_tasks.ecliptTemple import EcliptTemple
 
-continuosTasks_list = [CollectOnlinePacket(), CollectSummer(), DemonCountry(), GetTattoo(),
-                       Navigation(), PlantCrops(),
-                       XPfarmColector()]
-fixedTimeTasks_list = [Fishing(), Arena(), AssassinationOfMidnight()]
-dailyTimeTasks_list = [ArenaPET(), GuardSearch(), SkyWay(),
-                       SurroundingsSearch(), MainJudgment(), Labirinth()]
+continuosTasks_list = [CollectOnlinePacket(), 
+                       CollectSummer(), 
+                       DemonCountry(), 
+                       GetTattoo(),
+                       Navigation(), 
+                       PlantCrops(), 
+                       XPfarmColector(), 
+                       EcliptTemple()]
+
+fixedTimeTasks_list = [Fishing(),
+                       Arena(),
+                       AssassinationOfMidnight()]
+
+dailyTimeTasks_list = [ArenaPET(),
+                       GuardSearch(),
+                       SkyWay(),
+                       SurroundingsSearch(),
+                       MainJudgment(),
+                       Labirinth()]
 
 def main():
     init_control()
