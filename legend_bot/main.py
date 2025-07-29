@@ -19,6 +19,7 @@ from game_tasks.guildTreasure import GuildTreasure
 from game_tasks.arena import Arena
 from game_tasks.assassinationOfMidnight import AssassinationOfMidnight
 from game_tasks.ecliptTemple import EcliptTemple
+from game_tasks.contributeBuyInGuild import ContributeAndBuyInGuild
 
 continuosTasks_list = [CollectOnlinePacket(), 
                        CollectSummer(), 
@@ -38,7 +39,8 @@ dailyTimeTasks_list = [ArenaPET(),
                        SkyWay(),
                        SurroundingsSearch(),
                        MainJudgment(),
-                       Labirinth()]
+                       Labirinth(),
+                       ContributeAndBuyInGuild()]
 
 def main():
     init_control()
