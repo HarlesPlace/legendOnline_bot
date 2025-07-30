@@ -35,19 +35,19 @@ class EcliptTemple(RepeatableTask):
                                     click(r"legend_bot\images\eclipt_temple\cancelButton.png", region=outOfEnergyWarn_region, confidence=0.8)
                                     wait_time(1)
                                     break
-                                if wait(r"legend_bot\images\eclipt_temple\inBattleIndicator.png", timeout=60, region=TOP_RIGHT,CONFIDENCE=0.8):
+                                if wait(r"legend_bot\images\eclipt_temple\inBattleIndicator.png", timeout=60, region=TOP_RIGHT,confidence=0.8):
                                     if exists(r"legend_bot\images\eclipt_temple\autoFightButton.png", region=BOTTOM_RIGHT, confidence=0.9):
                                         click(r"legend_bot\images\eclipt_temple\autoFightButton.png", region=BOTTOM_RIGHT, confidence=0.9)
-                                    wait_until_disappear(r"legend_bot\images\eclipt_temple\inBattleIndicator.png", timeout=180, region=TOP_RIGHT, CONFIDENCE=0.8)
+                                    wait_until_disappear(r"legend_bot\images\eclipt_temple\inBattleIndicator.png", timeout=180, region=TOP_RIGHT, confidence=0.8)
                                 wait(r"legend_bot\images\eclipt_temple\windowBar.png", timeout=180, region=TOP_BAR,confidence=0.8)
                                 if exists(r"legend_bot\images\eclipt_temple\hiddenEventWarn.png", region=FULL_SCREEN, confidence=0.8):
                                     warn_region = find(r"legend_bot\images\eclipt_temple\hiddenEventWarn.png", region=FULL_SCREEN, confidence=0.8)
                                     if click(r"legend_bot\images\eclipt_temple\confirmeHiddenEvent.png", region=warn_region, confidence=0.8):
                                         wait_time(10)
-                                        if exists(r"legend_bot\images\eclipt_temple\inBattleIndicator.png", region=TOP_RIGHT,CONFIDENCE=0.8):
+                                        if exists(r"legend_bot\images\eclipt_temple\inBattleIndicator.png", region=TOP_RIGHT,confidence=0.8):
                                             if exists(r"legend_bot\images\eclipt_temple\autoFightButton.png", region=BOTTOM_RIGHT, confidence=0.9):
                                                 click(r"legend_bot\images\eclipt_temple\autoFightButton.png", region=BOTTOM_RIGHT, confidence=0.9)
-                                            wait_until_disappear(r"legend_bot\images\eclipt_temple\inBattleIndicator.png", timeout=180, region=TOP_RIGHT, CONFIDENCE=0.8)
+                                            wait_until_disappear(r"legend_bot\images\eclipt_temple\inBattleIndicator.png", timeout=180, region=TOP_RIGHT, confidence=0.8)
                                         if not exists(r"legend_bot\images\eclipt_temple\windowBar.png", region=TOP_BAR,confidence=0.8):
                                             wait(r"legend_bot\images\eclipt_temple\windowBar.png", timeout=60, region=TOP_BAR, confidence=0.8)
                         click(r"legend_bot\images\eclipt_temple\exitButton.png", region=windowBar_region, confidence=0.8)

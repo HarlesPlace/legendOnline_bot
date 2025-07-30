@@ -20,6 +20,7 @@ from game_tasks.arena import Arena
 from game_tasks.assassinationOfMidnight import AssassinationOfMidnight
 from game_tasks.ecliptTemple import EcliptTemple
 from game_tasks.contributeBuyInGuild import ContributeAndBuyInGuild
+from game_tasks.fantasyPub import FantasyPub
 
 continuosTasks_list = [CollectOnlinePacket(), 
                        CollectSummer(), 
@@ -28,7 +29,8 @@ continuosTasks_list = [CollectOnlinePacket(),
                        Navigation(), 
                        PlantCrops(), 
                        XPfarmColector(), 
-                       EcliptTemple()]
+                       EcliptTemple(),
+                       GuildTreasure()]
 
 fixedTimeTasks_list = [Fishing(),
                        Arena(),
@@ -40,7 +42,8 @@ dailyTimeTasks_list = [ArenaPET(),
                        SurroundingsSearch(),
                        MainJudgment(),
                        Labirinth(),
-                       ContributeAndBuyInGuild()]
+                       ContributeAndBuyInGuild(),
+                       FantasyPub()]
 
 def main():
     init_control()

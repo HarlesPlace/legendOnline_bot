@@ -33,7 +33,7 @@ class GuardSearch(DailyTask):
                             if wait(r"legend_bot\images\guard_search\battleWindowBar.png", confidence=0.8, timeout=30, region=TOP_BAR):
                                 if click(r"legend_bot\images\guard_search\challengeButton.png", region=BOTTOM_BAR, confidence=0.6):
                                     if wait(r"legend_bot\images\guard_search\inBattleIndicator.png", timeout=30, region=BOTTOM_RIGHT, confidence=0.8):
-                                        if wait_until_disappear(r"legend_bot\images\guard_search\inBattleIndicator.png", timeout=120, region=BOTTOM_RIGHT, confidence=0.8):
+                                        if wait_until_disappear(r"legend_bot\images\guard_search\inBattleIndicator.png", timeout=240, region=BOTTOM_RIGHT, confidence=0.8):
                                             if wait(r"legend_bot\images\guard_search\mainWindowBar.png", confidence=0.8, timeout=30, region=TOP_BAR):
                                                 pass
                                             else:
