@@ -29,6 +29,16 @@ def pause_or_continue():
     PAUSED = not PAUSED
     print(">> [PAUSA]" if PAUSED else ">> [RETOMADO]")
 
+def pause():
+    global PAUSED
+    PAUSED = True
+    print(">> [PAUSADO] O bot não executará novas tarefas até ser retomado.")
+
+def resume():
+    global PAUSED
+    PAUSED = False
+    print(">> [RETOMADO] O bot continuará a execução de tarefas.")
+
 def finish():
     global STOP
     STOP = True

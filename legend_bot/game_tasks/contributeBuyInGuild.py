@@ -64,16 +64,17 @@ class ContributeAndBuyInGuild(DailyTask):
                                 if wait(r"legend_bot\images\contribute_buy_in_guild\constructionsInterface.png",region=FULL_SCREEN, confidence=0.95, timeout=30):
                                     construction_region=find(r"legend_bot\images\contribute_buy_in_guild\constructionsInterface.png",region=FULL_SCREEN, confidence=0.95)
                                     if click(r"legend_bot\images\contribute_buy_in_guild\storeButton.png", confidence=0.9, region=construction_region):
-                                        if wait(r"legend_bot\images\contribute_buy_in_guild\storeWindowBar.png", region=TOP_BAR, confidence=0.8):
+                                        if wait(r"legend_bot\images\contribute_buy_in_guild\storeWindowBar.png", region=TOP_BAR, confidence=0.7, timeout=30):
                                             storeWindow_region=find(r"legend_bot\images\contribute_buy_in_guild\storeWindowBar.png", region=TOP_BAR, confidence=0.8)
                                             count_pages = 0
                                             for item in itensTo_buy:
+                                                print(f"Procurando o item {item} na loja da guilda...")
                                                 if not self.running:
                                                     break
                                                 if count_pages>=3:
                                                     print("Ocorreu algum erro, tetamos ir além das páginas da loja da guilda")
                                                     break
-                                                if not exists(item, region=FULL_SCREEN, confidence=0.93):
+                                                if not exists(item, region=FULL_SCREEN, confidence=0.93)and item !=itensTo_buy[0]:
                                                     print(f"Item {item} não encontrado.")
                                                     click(r"legend_bot\images\contribute_buy_in_guild\nextButton.png", region=BOTTOM_BAR, confidence=0.95)
                                                     wait_time(1)

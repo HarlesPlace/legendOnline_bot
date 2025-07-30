@@ -1,6 +1,10 @@
-from core.control import STOP, ERROR, PAUSED
-from utils.general_use import prepare_window
-import time
+from core.control import STOP, ERROR, PAUSED, pause, resume
+from utils.general_use import prepare_window, move_mouse_outside_screen
+import time, pyautogui, datetime
+from datetime import datetime, timedelta
+from utils.screenVision import master_exists, master_find, master_wait, master_wait_until_disappear
+from utils.actions import master_click
+from utils.regions import *
 
 class TaskManager:
     def __init__(self, dailyTasks, fixedTasks, repeatableTasks, max_retries=3):
@@ -12,9 +16,20 @@ class TaskManager:
         self.errorTasks = []  # lista de tuplas (task, retries)
         self.lastTaskType = "Daily"
         self.max_retries = max_retries
+        self.lastReload = datetime.now()
 
     def executeTasks(self):
         while not STOP:
+            if datetime.now() - self.lastReload > timedelta(hours=1):
+                pause()
+                print("[INFO] Recarregando bot...")
+                if not self.reload():
+                    print("[ERRO] Falha ao recarregar. Tentando novamente...")
+                    continue
+                else:
+                    print("[INFO] Bot recarregado com sucesso.")
+                    self.lastReload = datetime.now()
+                    resume()
             if not ERROR and not PAUSED:
                 runTask = self.determine_nextTask()
                 if runTask:
@@ -84,3 +99,50 @@ class TaskManager:
                 print(f"[TAREFA] {task.__class__.__name__} deve rodar agora (prioridade {task.priority})")
                 return task
         return None
+    
+    def reload():
+        pyautogui.press('esc')
+        time.sleep(1)
+        move_mouse_outside_screen()
+        time.sleep(3)
+        reconected=False
+        retrys = 0
+        while not reconected:
+            print(f"[RECOVERY] Tentativa de reconexão {retrys}")
+            menubar=master_find(r"legend_bot\images\recovery\menuBar.png", confidence=0.7, region=TOP_RIGHT)
+            if menubar:
+                master_click(r"legend_bot\images\recovery\refreshButton.png", region=menubar, confidence=0.8)
+                time.sleep(2)
+            time.sleep(1)
+            move_mouse_outside_screen()
+            time.sleep(3)
+            
+            if master_wait_until_disappear(r"legend_bot\images\recovery\disconectedIndicator.png", confidence=0.8, region=FULL_SCREEN, timeout=30):
+                print("[RECOVERY] Indicador sumiu")
+                if master_wait(r"legend_bot\images\recovery\preChargingWindow.png", timeout=90, confidence=0.8, region=FULL_SCREEN):
+                    if master_wait(r"legend_bot\images\recovery\chargingWindow.png", timeout=120, confidence=0.8, region=FULL_SCREEN):
+                        if master_wait_until_disappear(r"legend_bot\images\recovery\chargingWindow.png", timeout=180, confidence=0.8, region=FULL_SCREEN):
+                            print("[RECOVERY] tela de carregamento sumiu")
+                            count=0
+                            while count<5 and not master_exists(r"legend_bot\images\recovery\inGameIndicator2.png", confidence=0.7, region=BOTTOM_LEFT, debug=True):
+                                print(f"[RECOVERY] TEsperenado confirmação {count}")
+                                time.sleep(24)
+                                count+=1
+                            if master_exists(r"legend_bot\images\recovery\inGameIndicator2.png", confidence=0.7, region=BOTTOM_LEFT):
+                                if master_exists(r"legend_bot\images\recovery\castleButton.png", confidence=0.8,  region=TOP_RIGHT):
+                                    master_click(r"legend_bot\images\recovery\castleButton.png", confidence=0.8, region=TOP_RIGHT)
+                                    if master_wait(r"legend_bot\images\recovery\skyButton.png", timeout=60, confidence=0.8,  region=TOP_RIGHT):
+                                        reconected = True
+                                        print("[RECOVERY] Reconexão sucedida")
+                    else:
+                        print("Não entrou na tela de carregamento")
+                        time.sleep(90)
+                else:
+                    print("2")
+            else:
+                print("1")
+            retrys+=1
+        if reconected:
+            return True
+        else:
+            return False
