@@ -21,6 +21,7 @@ from game_tasks.assassinationOfMidnight import AssassinationOfMidnight
 from game_tasks.ecliptTemple import EcliptTemple
 from game_tasks.contributeBuyInGuild import ContributeAndBuyInGuild
 from game_tasks.fantasyPub import FantasyPub
+from game_tasks.globalBoss import GlobalBoss
 
 continuosTasks_list = [CollectOnlinePacket(), 
                        CollectSummer(), 
@@ -34,7 +35,8 @@ continuosTasks_list = [CollectOnlinePacket(),
 
 fixedTimeTasks_list = [Fishing(),
                        Arena(),
-                       AssassinationOfMidnight()]
+                       AssassinationOfMidnight(),
+                       GlobalBoss()]
 
 dailyTimeTasks_list = [ArenaPET(),
                        GuardSearch(),

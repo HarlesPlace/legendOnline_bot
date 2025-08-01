@@ -79,7 +79,7 @@ class Labirinth(DailyTask):
                                                 if wait(r"legend_bot\images\labirinth\gainsWindowBar.png", region=TOP_BAR, confidence=0.8, timeout=120):
                                                     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                                                     gains_region=find(r"legend_bot\images\labirinth\gainsWindowBar.png", region=TOP_BAR, confidence=0.8)
-                                                    click(r"legend_bot\images\labirinth\exitGainButton.png", region=TOP_BAR, confidence=0.8)
+                                                    click(r"legend_bot\images\labirinth\exitGainButton.png", region=gains_region, confidence=0.8)
                                                     wait_time(3)
                                                 else:
                                                     print("??????????????????????????????")
