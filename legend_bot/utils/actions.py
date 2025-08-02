@@ -117,32 +117,57 @@ def scroll(direction='down', amount=1, step=100, position=None, delay=0.1):
     return True
 
 @wait_until_all_ok
-def drag(from_image, to_image, timeout=10, confidence=0.8):
+def drag(from_image, to_image_or_direction, confidence=0.8):
     """
-    Arrasta o mouse do centro de from_image até o centro de to_image.
+    Arrasta o mouse do centro de from_image até:
+    - o centro de to_image (se for uma imagem), ou
+    - uma direção ("up", "down", "left", "right") até a borda da tela.
 
-    - from_image: caminho da imagem onde começa o arrasto
-    - to_image: caminho da imagem onde termina
-    - timeout: tempo máximo para esperar as imagens
-    - confidence: similaridade mínima para encontrar as imagens
+    Assumido que as imagens já estão visíveis na tela.
+
+    - from_image: imagem de origem
+    - to_image_or_direction: imagem de destino ou direção textual
+    - confidence: precisão da correspondência
     """
-    start_pos = wait(from_image, timeout=timeout, confidence=confidence)
-    if not start_pos:
+    # Localiza imagem de origem
+    start_region = find(from_image, confidence=confidence)
+    if not start_region:
         print("[ERRO] Imagem de origem não encontrada para drag.")
         return False
 
-    end_pos = wait(to_image, timeout=timeout, confidence=confidence)
-    if not end_pos:
-        print("[ERRO] Imagem de destino não encontrada para drag.")
-        return False
+    start_x = start_region[0] + start_region[2] // 2
+    start_y = start_region[1] + start_region[3] // 2
 
-    pyautogui.moveTo(start_pos[0], start_pos[1], duration=0.3)
+    # Determina destino
+    if isinstance(to_image_or_direction, str) and to_image_or_direction.lower() in ("up", "down", "left", "right"):
+        screen_width, screen_height = pyautogui.size()
+        direction = to_image_or_direction.lower()
+
+        if direction == "up":
+            end_x, end_y = start_x, 0
+        elif direction == "down":
+            end_x, end_y = start_x, screen_height - 1
+        elif direction == "left":
+            end_x, end_y = 0, start_y
+        elif direction == "right":
+            end_x, end_y = screen_width - 1, start_y
+    else:
+        end_region = find(to_image_or_direction, confidence=confidence)
+        if not end_region:
+            print("[ERRO] Imagem de destino não encontrada para drag.")
+            return False
+
+        end_x = end_region[0] + end_region[2] // 2
+        end_y = end_region[1] + end_region[3] // 2
+
+    # Executa arrasto
+    pyautogui.moveTo(start_x, start_y, duration=0.3)
     pyautogui.mouseDown()
     time.sleep(0.1)
-    pyautogui.moveTo(end_pos[0], end_pos[1], duration=0.5)
+    pyautogui.moveTo(end_x, end_y, duration=0.5)
     pyautogui.mouseUp()
 
-    print(f"[INFO] Arrasto realizado de {start_pos} até {end_pos}")
+    print(f"[INFO] Arrasto realizado de ({start_x}, {start_y}) até ({end_x}, {end_y})")
     return True
 
 def master_wait_time(seconds):

@@ -57,9 +57,9 @@ class GlobalBoss(FixedTimeTask):
 
     def _run_task(self):
         """
-        Implementa a lógica para assassinato da meia noite
+        Implementa a lógica para chefão Global
         """
-        print("Iniciando assassinato da meia noite")
+        print("Iniciando Chefão Global")
         go_to_Interface("castle")
         if by_chest_of_time(r"legend_bot\images\global_boss\globalBossEventButton.png", confidence=0.8):
             if wait(r"legend_bot\images\global_boss\entranceWindowBar.png", timeout=120, region=TOP_BAR, confidence=0.8):
