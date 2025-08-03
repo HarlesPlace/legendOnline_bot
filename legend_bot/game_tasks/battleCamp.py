@@ -5,7 +5,6 @@ from utils.screenVision import exists, wait, find, wait_until_disappear
 from utils.actions import wait_time, click, drag
 from utils.regions import *
 from datetime import time, datetime
-from typing import override
 
 class BattleCamp(FixedTimeTask):
     def __init__(self):

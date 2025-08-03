@@ -39,7 +39,7 @@ def master_wait(image_path, timeout=10, confidence=0.8, debug=DEBUG, region=None
         result = cv2.matchTemplate(screenshot, template, cv2.TM_CCOEFF_NORMED)
         _, max_val, _, max_loc = cv2.minMaxLoc(result)
         if debug:
-            print(f"[DEBUG] Similaridade: {max_val:.3f}")
+            pass
         if max_val >= confidence:
             top_left = (max_loc[0] + rx, max_loc[1] + ry)
             h, w = template.shape[:2]
@@ -50,7 +50,7 @@ def master_wait(image_path, timeout=10, confidence=0.8, debug=DEBUG, region=None
             print(f"[INFO] Imagem encontrada em ({center_x}, {center_y})")
             return (center_x, center_y, w, h)
         if debug:
-            print(f"[DEBUG] Tempo de espera: {elapsed:.2f}s / Tempo limite: {timeout}s")
+            pass
         if elapsed > timeout:
             print("[AVISO] Imagem não encontrada no tempo limite.")
             return None
@@ -113,11 +113,10 @@ def wait(image_path, timeout=10, confidence=0.8, debug=DEBUG, region=None):
             if debug:
                 highlight_area(top_left[0], top_left[1], w, h)
 
-            print(f"[INFO] Imagem encontrada em ({center_x}, {center_y})")
             return (center_x, center_y, w, h)
 
         if debug:
-            print(f"[DEBUG] Tempo de espera: {elapsed:.2f}s / Tempo limite: {timeout}s")
+            pass
 
         if elapsed > timeout:
             print("[AVISO] Imagem não encontrada no tempo limite.")
@@ -151,7 +150,7 @@ def master_find(image_path, confidence=0.8, debug=DEBUG, region=None):
     result = cv2.matchTemplate(screenshot, template, cv2.TM_CCOEFF_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
     if debug:
-        print(f"[DEBUG] Similaridade: {max_val:.3f}")
+        pass
     if max_val >= confidence:
         top_left = (max_loc[0] + x, max_loc[1] + y)
         h, w = template.shape[:2]
@@ -260,10 +259,8 @@ def master_wait_until_disappear(image_path, timeout=15, confidence=0.9, region=N
     while True:
         elapsed = time.time() - start_time 
         if not master_exists(image_path, confidence=confidence, region=region):
-            print(f"[VISÃO] Imagem '{image_path}' desapareceu.")
             return True
         if elapsed> timeout:
-            print(f"[VISÃO] Timeout. Imagem '{image_path}' ainda está visível.")
             return False
         time.sleep(1)
 
@@ -287,10 +284,8 @@ def wait_until_disappear(image_path, timeout=15, confidence=0.9, region=None):
         total_pause_time += pause_end - pause_start
         elapsed = time.time() - start_time - total_pause_time
         if not exists(image_path, confidence=confidence, region=region):
-            print(f"[VISÃO] Imagem '{image_path}' desapareceu.")
             return True
         if elapsed> timeout:
-            print(f"[VISÃO] Timeout. Imagem '{image_path}' ainda está visível.")
             return False
         time.sleep(1)
 

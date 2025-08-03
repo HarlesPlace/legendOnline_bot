@@ -10,9 +10,7 @@ def master_hover(image_path, confidence=0.8, region=None):
     position = master_find(image_path, confidence=confidence, debug=DEBUG, region=region)
     if position:
         pyautogui.moveTo(position[0]+position[2]/2, position[1]+position[3]/2, duration=0.3)
-        print(f"[INFO] Mouse movido até {position}")
         return True
-    print("[ERRO] Imagem não encontrada para hover.")
     return False
 
 hover = wait_until_all_ok(master_hover)
@@ -28,10 +26,8 @@ def hover_position(position, duration=0.3):
     if position and len(position) == 2:
         x, y = map(int,position)
         pyautogui.moveTo(x, y, duration=duration)
-        print(f"[INFO] Mouse movido até {position}")
         return True
     else:
-        print("[ERRO] Posição inválida fornecida para hover.")
         return False
 
 def master_click(image_path, confidence=0.8, region=None):
@@ -40,9 +36,7 @@ def master_click(image_path, confidence=0.8, region=None):
     """
     if master_hover(image_path, confidence=confidence, region=region):
         pyautogui.click()
-        print("[INFO] Clique executado.")
         return True
-    print("[ERRO] Não foi possível clicar (imagem não encontrada).")
     return False
 
 click=wait_until_all_ok(master_click)
@@ -113,7 +107,6 @@ def scroll(direction='down', amount=1, step=100, position=None, delay=0.1):
             return False
         time.sleep(delay)
 
-    print(f"[INFO] Scroll {direction} realizado {amount}x (step={step})")
     return True
 
 @wait_until_all_ok
@@ -167,7 +160,6 @@ def drag(from_image, to_image_or_direction, confidence=0.8):
     pyautogui.moveTo(end_x, end_y, duration=0.5)
     pyautogui.mouseUp()
 
-    print(f"[INFO] Arrasto realizado de ({start_x}, {start_y}) até ({end_x}, {end_y})")
     return True
 
 def master_wait_time(seconds):
@@ -189,7 +181,6 @@ def master_wait_time(seconds):
         elapsed = time.time() - start_time - total_pause_time
 
         if elapsed > seconds:
-            print("[AVISO] Tempo de espera cumprido.")
             return None
         time.sleep(seconds)
 
@@ -211,8 +202,6 @@ def click_all(image_path, confidence=0.8, delay_between=1, debug=DEBUG):
         click_position(pos)
         wait_time(delay_between)
 
-    if debug:
-        print(f"[INFO] {len(positions)} clique(s) realizados.")
 
 @wait_until_all_ok
 def click_position(position):

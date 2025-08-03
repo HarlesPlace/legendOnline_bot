@@ -5,7 +5,7 @@ from utils.screenVision import exists, wait, find
 from utils.actions import wait_time, click
 from utils.regions import *
 from datetime import time, datetime
-from typing import override
+#from typing import override
 
 class GlobalBoss(FixedTimeTask):
     def __init__(self):
@@ -26,7 +26,7 @@ class GlobalBoss(FixedTimeTask):
                 return idx  # 0 para manhã, 1 para noite
         return None
 
-    @override
+#    @override
     def should_run(self) -> bool:
         slot = self._get_current_slot()
         if not self._is_weekday_allowed() or slot is None:
@@ -38,7 +38,7 @@ class GlobalBoss(FixedTimeTask):
             return True
         return False
     
-    @override
+#    @override
     def run(self):
         slot = self._get_current_slot()
         if slot is None:

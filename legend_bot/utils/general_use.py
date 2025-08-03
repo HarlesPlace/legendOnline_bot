@@ -24,8 +24,6 @@ def maximizeGameWindow():
     if exists("legend_bot/images/maximize_Game_Window/notMaxWindowDetail.png", confidence=0.8,  region=TOP_RIGHT):
         click("legend_bot/images/maximize_Game_Window/maximizeButton.png", confidence=0.8, region=TOP_LEFT)
         wait_time(3)
-    else:
-        print("[INFO] Janela do jogo já está maximizada ou não foi possível encontrar o botão.")
     if exists("legend_bot/images/maximize_Game_Window/maximizePermissionRequest.png", confidence=0.8,  region=TOP_BAR):
         click("legend_bot/images/maximize_Game_Window/confirmMaximizeButton.png", confidence=0.8, region=TOP_BAR)
         wait_time(3)
@@ -83,7 +81,6 @@ def prepare_window():
     if not exists(r"legend_bot\images\prepare_window\chatColapsedIndicator.png", confidence=0.8, region=BOTTOM_LEFT):
         if exists("legend_bot/images/prepare_window/chatColapseControl.png", confidence=0.95,  region=BOTTOM_LEFT):
             especificPlace=find("legend_bot/images/prepare_window/chatColapseControl.png", confidence=0.8, region=BOTTOM_LEFT)
-            print(f"[INFO] Especific place found: {especificPlace}")
             click("legend_bot/images/prepare_window/chatColapserButton.png", confidence=0.8, region=especificPlace)
             wait_time(3)
             click("legend_bot/images/prepare_window/chatColapserButton.png", confidence=0.8, region=especificPlace)
@@ -110,11 +107,9 @@ def find_in_eventBar(image_path, confidence=0.9):
     move_mouse_outside_screen()
     wait_time(6)
     if (not exists(image_path, confidence=confidence,  region=TOP_BAR)):
-        print("Next Button")
         click_with_offset(r"legend_bot\images\find_in_eventBar\eventsColapserButton.png", confidence=confidence, region=TOP_BAR, offset=(45,0))
         wait_time(1)
     if not exists(image_path, confidence=confidence,  region=TOP_BAR):
-        print("Preview Button")
         click_with_offset(r"legend_bot\images\find_in_eventBar\eventsColapserButton.png", confidence=confidence, region=TOP_BAR, offset=(-45,0))
         wait_time(1)
     move_mouse_outside_screen()
@@ -169,7 +164,6 @@ def by_map_go_to(place_name):
     click_x = map_x + offset_x
     click_y = map_y + offset_y
 
-    print(f"[INFO] Indo para '{place_name}' em ({click_x}, {click_y})")
     click_position((click_x, click_y))
     if wait_until_disappear(r"legend_bot\images\by_map_go_to\map.png", timeout=60, confidence=0.8, region=FULL_SCREEN):
         return True

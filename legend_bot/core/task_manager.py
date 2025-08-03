@@ -96,7 +96,7 @@ class TaskManager:
         sorted_tasks = sorted(task_list, key=lambda task: getattr(task, "priority", 5))  # prioridade padrão = 5
         for task in sorted_tasks:
             if task.should_run():
-                print(f"[TAREFA] {task.__class__.__name__} deve rodar agora (prioridade {task.priority})")
+                #print(f"[TAREFA] {task.__class__.__name__} deve rodar agora (prioridade {task.priority})")
                 return task
         return None
     
