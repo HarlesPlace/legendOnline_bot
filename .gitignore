@@ -4,3 +4,4 @@ images/
 debugOCR/
 teste.py
 legend_bot/ai/**/dataset/
+__init__.py

@@ -12,3 +12,5 @@ PyRect==0.2.0
 PyScreeze==1.0.1
 pytesseract==0.3.13
 pytweening==1.2.0
+scikit-learn
+joblib
